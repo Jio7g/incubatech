@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Client extends Model
 {
+    protected $table = 'clientes';
     /**
      * Los atributos que son asignables en masa.
+     * 
      *
      * @var array
      */

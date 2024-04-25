@@ -12,7 +12,7 @@ class IncubationData extends Model
      * @var array
      */
     protected $fillable = [
-        'cliente_id', 'producto', 'cantidad', 'tipo_huevo', 'numero_bandeja', 'etapa', 'estado', 'descripcion',
+        'fecha_recepcion', 'cliente_id', 'producto', 'cantidad', 'tipo_huevo', 'numero_bandeja', 'etapa', 'estado', 'descripcion','fecha_entrega'
     ];
 
     /**
