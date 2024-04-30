@@ -11,8 +11,8 @@
             <nav class="space-y-2">
                 <a href="{{ route('users.index') }}" class="block px-4 py-2 rounded-md hover:bg-gray-200 hover:text-blue-600 transition duration-300">Usuarios</a>
                 <a href="{{ route('clients.index') }}" class="block px-4 py-2 rounded-md hover:bg-gray-200 hover:text-blue-600 transition duration-300">Clientes</a>
-                <a href="{{ url('/registro') }}" class="block px-4 py-2 rounded-md hover:bg-gray-200 hover:text-blue-600 transition duration-300">Registro</a>
-                <a href="{{ url('/incubacion') }}" class="block px-4 py-2 rounded-md hover:bg-gray-200 hover:text-blue-600 transition duration-300">Incubación</a>
+                <a href="{{ route('incubation.create') }}" class="block px-4 py-2 rounded-md hover:bg-gray-200 hover:text-blue-600 transition duration-300">Registro</a>
+                <a href="{{ route('incubations_clients.index') }}" class="block px-4 py-2 rounded-md hover:bg-gray-200 hover:text-blue-600 transition duration-300">Incubación</a>
                 <a href="{{ url('/historial') }}" class="block px-4 py-2 rounded-md hover:bg-gray-200 hover:text-blue-600 transition duration-300">Historial</a>
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="block px-4 py-2 rounded-md hover:bg-gray-200 hover:text-blue-600 transition duration-300">Cerrar Sesión</a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">

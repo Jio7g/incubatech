@@ -10,11 +10,15 @@
     @csrf
     @method('PUT')
 
+                        <div class="mb-3">
+                        <label for="codigo" class="form-label">Codigo</label>
+                        <input type="text" class="form-control" id="codigo" name="codigo" value="{{ $client->codigo }}" required>
+                        </div>
 
-        <div class="mb-3">
-            <label for="nombre" class="form-label">Nombre</label>
-            <input type="text" class="form-control" id="nombre" name="nombre" value="{{ $client->nombre }}" required>
-        </div>
+                        <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" value="{{ $client->nombre }}" required>
+                        </div>
 
                         <div class="mb-3">
                             <label for="direccion" class="form-label">Direccion</label>

@@ -9,6 +9,7 @@
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Codigo</th>
                 <th>Nombre</th>
                 <th>Dirección</th>
                 <th>Teléfono</th>
@@ -20,6 +21,7 @@
             @foreach ($clients as $client)
             <tr>
                 <td>{{ $client->id }}</td>
+                <td>{{ $client->codigo }}</td>
                 <td>{{ $client->nombre }}</td>
                 <td>{{ $client->direccion }}</td>
                 <td>{{ $client->telefono }}</td>

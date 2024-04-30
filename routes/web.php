@@ -6,6 +6,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\IncubationDataController;
+use App\Http\Controllers\IncubationClientController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -52,6 +54,18 @@ Route::get('/clientes', [ClientController::class, 'index'])->name('clients.index
 Route::get('/clientes/{client}/editar', [ClientController::class, 'edit'])->name('clients.edit');
 Route::delete('/clientes/{client}', [ClientController::class, 'destroy'])->name('clients.destroy');
 Route::put('/clientes/{client}', [ClientController::class, 'update'])->name('clients.update');
+
+//rutas para datos de incubacion
+
+Route::get('/incubation/create', [IncubationDataController::class, 'create'])->name('incubation.create');
+Route::post('/incubation', [IncubationDataController::class, 'store'])->name('incubation.store');
+Route::get('/incubation', [IncubationDataController::class, 'index'])->name('incubation.index'); // Suponiendo que quieras listar los registros
+Route::get('/api/clients', [IncubationDataController::class, 'getClients']);
+
+
+
+//ruta para lista de clientes con incubacion
+Route::get('/incubation-clients', [IncubationClientController::class, 'index'])->name('incubations_clients.index');
 
 
 

@@ -24,6 +24,7 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
+            'codigo' => 'required|max:255',
             'nombre' => 'required|max:255',
             'direccion' => 'required|max:255',
             'telefono' => 'required|max:255',
@@ -56,6 +57,7 @@ class ClientController extends Controller
         }
     
         $data = $request->validate([
+            'codigo' => 'required|max:255',
             'nombre' => 'required|max:255',
             'direccion' => 'required|max:255',
             'telefono' => 'required|max:255',
