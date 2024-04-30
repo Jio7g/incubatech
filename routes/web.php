@@ -40,7 +40,14 @@ Route::put('/usuarios/{user}', [UserController::class, 'update'])->name('users.u
 // ...
 
 //ruta para crear clientes
+Route::resource('clients', 'ClientController');
+
+// Custom route for creating clients if you want a different URI than '/clients/create'.
 Route::get('/clientes/crear', [ClientController::class, 'create'])->name('clients.create');
+
+// Custom route for storing clients if you want a different URI than '/clients'.
+Route::post('/clientes/store', [ClientController::class, 'store'])->name('clients.store');
+
 Route::get('/clientes', [ClientController::class, 'index'])->name('clients.index');
 Route::get('/clientes/{client}/editar', [ClientController::class, 'edit'])->name('clients.edit');
 Route::delete('/clientes/{client}', [ClientController::class, 'destroy'])->name('clients.destroy');

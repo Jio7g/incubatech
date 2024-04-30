@@ -29,6 +29,11 @@
                         </div>
                         <div class="mt-3">
                             <a href="{{ route('password.request') }}">Olvidaste la contraseña?</a>
+
+                        </div>
+                        <div class="mt-3">
+                            <a href="{{ route('register') }}">Registrarse</a>
+                            
                         </div>
                     </form>
                 </div>
