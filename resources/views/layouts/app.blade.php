@@ -1,69 +1,27 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
-        }
-
-        .sidebar {
-            background: #f8f9fa; /* Color de fondo */
-            height: 100vh; /* Altura completa de la ventana */
-            width: 250px; /* Ancho del sidebar */
-            position: fixed; /* Fijo en la página */
-            left: 0;
-            top: 0;
-            padding: 20px; /* Espaciado interno */
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* Sombra sutil */
-        }
-
-        .sidebar nav a {
-            display: block;
-            padding: 10px;
-            text-decoration: none;
-            color: #333;
-            margin-bottom: 5px;
-            border-radius: 4px;
-            transition: background-color 0.3s, color 0.3s; /* Transición suave */
-        }
-
-        .sidebar nav a:hover {
-            background-color: #e9ecef;
-            color: #0056b3; /* Cambio de color del texto */
-        }
-
-        main {
-            margin-left: 270px; /* Espacio para el sidebar */
-            padding: 20px;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <div id="app">
-    @auth
-        <aside class="sidebar">
-            <nav>
-                <a href="{{ route('users.index') }}">Usuarios</a>
-                <a href="{{ route('clients.index') }}">Clientes</a>
-                <a href="{{ url('/registro') }}">Registro</a>
-                <a href="{{ url('/incubacion') }}">Incubación</a>
-                <a href="{{ url('/historial') }}">Historial</a>
-                <a href="{{ route('logout') }}"
-                   onclick="event.preventDefault();
-                             document.getElementById('logout-form').submit();">
-                    Cerrar Sesión
-                </a>
-
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+<body class="font-sans text-gray-800">
+    <div id="app" class="flex flex-col md:flex-row">
+        @auth
+        <aside class="bg-gray-100 w-full md:w-64 min-h-screen md:fixed left-0 top-0 p-4 shadow-md">
+            <nav class="space-y-2">
+                <a href="{{ route('users.index') }}" class="block px-4 py-2 rounded-md hover:bg-gray-200 hover:text-blue-600 transition duration-300">Usuarios</a>
+                <a href="{{ route('clients.index') }}" class="block px-4 py-2 rounded-md hover:bg-gray-200 hover:text-blue-600 transition duration-300">Clientes</a>
+                <a href="{{ url('/registro') }}" class="block px-4 py-2 rounded-md hover:bg-gray-200 hover:text-blue-600 transition duration-300">Registro</a>
+                <a href="{{ url('/incubacion') }}" class="block px-4 py-2 rounded-md hover:bg-gray-200 hover:text-blue-600 transition duration-300">Incubación</a>
+                <a href="{{ url('/historial') }}" class="block px-4 py-2 rounded-md hover:bg-gray-200 hover:text-blue-600 transition duration-300">Historial</a>
+                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="block px-4 py-2 rounded-md hover:bg-gray-200 hover:text-blue-600 transition duration-300">Cerrar Sesión</a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
                     @csrf
                 </form>
             </nav>
         </aside>
         @endauth
-        <main class="@auth main-content @endauth">
+        <main class="flex-1 p-4 md:ml-64">
             @yield('content')
         </main>
     </div>
