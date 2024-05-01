@@ -21,6 +21,7 @@
                 <td>{{ $client->telefono }}</td>
                 <td>
                     <!--incluir botones-->
+                    <a href="{{ route('incubations.show', $client->id) }}" class="btn btn-info">Ver Incubaciones</a>
                 </td>
             </tr>
             @endforeach

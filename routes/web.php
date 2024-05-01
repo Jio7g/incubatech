@@ -66,6 +66,7 @@ Route::get('/api/clients', [IncubationDataController::class, 'getClients']);
 
 //ruta para lista de clientes con incubacion
 Route::get('/incubation-clients', [IncubationClientController::class, 'index'])->name('incubations_clients.index');
+Route::get('/incubations/{client}', [IncubationClientController::class, 'show'])->name('incubations.show');
 
 
 
