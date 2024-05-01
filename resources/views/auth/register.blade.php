@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="container mx-auto mt-8">
     <div class="max-w-md mx-auto">
         <div class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
