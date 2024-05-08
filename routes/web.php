@@ -11,7 +11,7 @@ use App\Http\Controllers\IncubationClientController;
 
 Route::get('/', function () {
     return view('auth.login');
-})->middleware('guest'); 
+})->middleware('guest');
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
@@ -67,7 +67,8 @@ Route::get('/api/clients', [IncubationDataController::class, 'getClients']);
 //ruta para lista de clientes con incubacion
 Route::get('/incubation-clients', [IncubationClientController::class, 'index'])->name('incubations_clients.index');
 Route::get('/incubations/{client}', [IncubationClientController::class, 'show'])->name('incubations.show');
-
+Route::get('/incubaciones/compartir/{clientId}/{token}', [IncubationClientController::class, 'showSharedIncubation'])->name('incubations.shared');
+Route::get('/incubaciones/compartir/{clientId}', [IncubationClientController::class, 'generateShareLink'])->name('incubations.share');
 
 
 
