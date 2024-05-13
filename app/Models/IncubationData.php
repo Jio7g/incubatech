@@ -31,4 +31,32 @@ class IncubationData extends Model
     {
         return $this->belongsTo(Client::class);
     }
+
+    public function actualizaciones()
+{
+    return $this->hasMany(Actualizacion::class, 'incubacion_id');
+}
+
+
+    public function save(array $options = [])
+    {
+        // Asigna huevos_proceso a cantidad cuando se crea una nueva incubación
+        if (!$this->exists && empty($this->huevos_proceso)) {
+            $this->huevos_proceso = $this->cantidad;
+        }
+
+        parent::save($options);
+    }
+
+    public function getHuevosMalosAttribute()
+{
+    // Si el modelo aún no se ha guardado, devolver el valor original
+    if (!$this->exists) {
+        return $this->attributes['huevos_malos'] ?? 0;
+    }
+
+    // Suma los huevos malos de todas las actualizaciones
+    return $this->actualizaciones()->sum('huevos_malos');
+}
+
 }

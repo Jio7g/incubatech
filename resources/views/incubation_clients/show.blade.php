@@ -53,7 +53,10 @@
                         <td class="px-6 py-4 whitespace-nowrap">{{ $incubation->estado }}</td>
                         <td class="px-6 py-4">{{ $incubation->descripcion }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-center">
-                            <!-- botón de actualizar -->
+                        <a href="{{ route('actualizaciones.create', $incubation->id) }}"
+                        class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">Actualizar
+                        </a>
+
                         </td>
                     </tr>
                     @endforeach

@@ -71,6 +71,13 @@ Route::get('/incubaciones/compartir/{clientId}/{token}', [IncubationClientContro
 Route::get('/incubaciones/compartir/{clientId}', [IncubationClientController::class, 'generateShareLink'])->name('incubations.share');
 
 
+use App\Http\Controllers\ActualizacionController;
+
+Route::get('/actualizaciones', [ActualizacionController::class, 'index'])->name('actualizaciones.index');
+Route::post('/actualizaciones', [ActualizacionController::class, 'store'])->name('actualizaciones.store');
+Route::get('/actualizaciones/create/{id}', [ActualizacionController::class, 'create'])->name('actualizaciones.create');
+
+
 
 
 
