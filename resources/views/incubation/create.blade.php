@@ -64,7 +64,7 @@
                 </thead>
                 <tbody id="clientsTableBody" class="bg-white divide-y divide-gray-200">
                   @foreach($clients as $client)
-                  <tr class="hover:bg-gray-100 cursor-pointer" onclick="selectClient({{ $client->toJson() }})">
+                  <tr class="hover:bg-gray-100 cursor-pointer" data-client='@json($client)' onclick="selectClientFromData(this)">
                     <td class="px-6 py-4 whitespace-nowrap">
                       {{ $client->codigo }}
                     </td>
@@ -127,6 +127,17 @@ function fetchClients() {
     .catch(error => {
       console.error('Error loading the clients:', error);
     });
+}
+
+function selectClientFromData(element) {
+    // Extrae los datos almacenados en el atributo 'data-client'
+    const clientData = element.getAttribute('data-client');
+    
+    // Parsea el JSON a un objeto de JavaScript
+    const client = JSON.parse(clientData);
+    
+    // Llama a la función 'selectClient' con el objeto cliente parseado
+    selectClient(client);
 }
 
 // Función para seleccionar un cliente y llenar los campos del formulario

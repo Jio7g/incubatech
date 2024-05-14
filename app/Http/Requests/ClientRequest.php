@@ -24,21 +24,28 @@ class ClientRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
-            'codigo' => 'required|unique:clientes,codigo|max:20',
-            'nombre' => ['required', 'string', 'max:255'],
+        return [
+            'codigo' => [
+                'required',
+                'max:20',
+                Rule::unique('clientes', 'codigo')->ignore($this->client), // Asumiendo que 'cliente' es el nombre del parámetro de la ruta
+            ],
+            'nombre' => [
+                'required',
+                'string',
+                'max:255'
+            ],
             'direccion' => 'required|max:255',
             'telefono' => 'required|numeric',
             'correo' => [
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('clientes')->ignore($this->cliente),
+                Rule::unique('clientes', 'correo')->ignore($this->client),
             ],
         ];
-
-        return $rules;
     }
+    
 
     /**
      * Get the error messages for the defined validation rules.

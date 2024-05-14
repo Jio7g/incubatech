@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
     @yield('styles')
 </head>
+
 <body class="font-sans text-gray-800">
     <div id="app" class="flex flex-col md:flex-row" x-data="{open: false}">
         @auth
@@ -50,15 +51,29 @@
                                 <i class="fas fa-address-book mr-2"></i>
                                 <span>Clientes</span>
                             </a>
-                            <a href="{{ route('incubation.create') }}" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700 transition duration-300">
-                                <i class="fas fa-plus-circle mr-2"></i>
-                                <span>Registro</span>
-                            </a>
+
+    <div class="relative" x-data="{ incubationMenuOpen: false }">
+    <button @click="incubationMenuOpen = !incubationMenuOpen" class="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700">
+        Gestionar Incubaciones <i class="fas fa-caret-down ml-2"></i>
+    </button>
+    <div x-show="incubationMenuOpen" @click.away="incubationMenuOpen = false" class="absolute mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+        <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+            <a href="{{ route('incubation.create') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                <i class="fas fa-plus-circle mr-2"></i>Registro
+            </a>
+            <a href="{{ route('incubation.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                <i class="fas fa-list mr-2"></i>Listar
+            </a>
+        </div>
+    </div>
+</div>
+
+
                             <a href="{{ route('incubations_clients.index') }}" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700 transition duration-300">
                                 <i class="fas fa-egg mr-2"></i>
                                 <span>Incubación</span>
                             </a>
-                            <a href="{{ url('/historial') }}" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700 transition duration-300">
+                            <a href="{{ route('bitacoras.index') }}" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700 transition duration-300">
                                 <i class="fas fa-history mr-2"></i>
                                 <span>Historial</span>
                             </a>
@@ -93,10 +108,22 @@
                     <i class="fas fa-address-book mr-2"></i>
                     <span>Clientes</span>
                 </a>
-                <a href="{{ route('incubation.create') }}" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700 transition duration-300">
-                    <i class="fas fa-plus-circle mr-2"></i>
-                    <span>Registro</span>
-                </a>
+                <div class="relative" x-data="{ incubationMenuOpen: false }">
+    <button @click="incubationMenuOpen = !incubationMenuOpen" class="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700">
+        Gestionar Incubaciones <i class="fas fa-caret-down ml-2"></i>
+    </button>
+    <div x-show="incubationMenuOpen" @click.away="incubationMenuOpen = false" class="absolute mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+        <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+            <a href="{{ route('incubation.create') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                <i class="fas fa-plus-circle mr-2"></i>Registro
+            </a>
+            <a href="{{ route('incubation.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                <i class="fas fa-list mr-2"></i>Listar
+            </a>
+        </div>
+    </div>
+</div>
+
                 <a href="{{ route('incubations_clients.index') }}" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700 transition duration-300">
                     <i class="fas fa-egg mr-2"></i>
                     <span>Incubación</span>

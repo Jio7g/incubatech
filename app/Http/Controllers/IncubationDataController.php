@@ -6,6 +6,7 @@ use App\Models\IncubationData;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Http\Requests\IncubationDataRequest;
+use Illuminate\Support\Facades\Log;
 
 class IncubationDataController extends Controller
 {
@@ -58,8 +59,9 @@ class IncubationDataController extends Controller
      * @param  \App\Models\IncubationData  $incubationData
      * @return \Illuminate\View\View
      */
-    public function show(IncubationData $incubationData)
+    public function show($id)
     {
+        $incubationData = IncubationData::with('cliente')->findOrFail($id);
         return view('incubation.show', compact('incubationData'));
     }
 
@@ -78,13 +80,23 @@ class IncubationDataController extends Controller
     /**
      * Actualiza los datos de incubación especificados en el almacenamiento.
      */
-    public function update(IncubationDataRequest $request, IncubationData $incubationData)
-    {
-        $validatedData = $request->validated();
-        $incubationData->update($validatedData);
-        return redirect()->route('incubation.index');
-    }
 
+     public function update(IncubationDataRequest $request, $id)
+     {
+         try {
+             $validatedData = $request->validated();
+             $incubationData = IncubationData::findOrFail($id);
+             $incubationData->update($validatedData);
+         } catch (\Exception $e) {
+             // Enviar el error directamente a la vista usando withErrors
+             return redirect()->back()->withErrors('Error al actualizar la incubación: ' . $e->getMessage())->withInput();
+         }
+     
+         return redirect()->route('incubation.index')->with('success', 'Datos de incubación actualizados correctamente.');
+     }
+     
+
+    
     /**
      * Elimina los datos de incubación especificados del almacenamiento.
      *
@@ -93,7 +105,23 @@ class IncubationDataController extends Controller
      */
     public function destroy(IncubationData $incubationData)
     {
-        $incubationData->delete();
-        return redirect()->route('incubation.index');
+        try {
+            $incubationData->delete();
+            return redirect()->route('incubation.index')->with('success', 'Incubación eliminada correctamente.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'No se pudo eliminar la incubación.');
+        }
     }
+
+    // IncubacionController.php
+    public function imprimir($id)
+    {
+        // Cambia 'client' a 'cliente' para coincidir con la definición del modelo
+        $incubationData = IncubationData::with('cliente')->findOrFail($id); 
+        return view('incubation.imprimir', compact('incubationData'));
+    }
+    
+    
+
+    
 }

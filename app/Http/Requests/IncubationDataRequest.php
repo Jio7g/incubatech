@@ -33,7 +33,9 @@ class IncubationDataRequest extends FormRequest
             'etapa' => 'nullable',
             'estado' => 'nullable',
             'descripcion' => 'nullable',
-            // Añade más reglas de validación según necesites
+            'huevos_malos' => 'nullable',
+            'huevos_eclosionados' => 'nullable',
+            'huevos_proceso' => 'nullable',
         ];
     }
 

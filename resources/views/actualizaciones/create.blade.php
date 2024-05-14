@@ -28,6 +28,10 @@
             <input type="number" name="huevos_malos" value="{{ old('huevos_malos') }}">
         </div>
         <div>
+            <label>Huevos Eclosionados:</label>
+            <input type="number" name="huevos_eclosionados" value="{{ old('huevos_eclosionados') }}">
+        </div>
+        <div>
             <label>Etapa:</label>
             <input type="text" name="etapa" value="{{ old('etapa') }}">
         </div>

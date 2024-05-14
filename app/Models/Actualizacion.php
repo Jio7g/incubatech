@@ -9,7 +9,7 @@ class Actualizacion extends Model
     protected $table = 'actualizaciones';
 
     protected $fillable = [
-        'incubacion_id', 'cliente_id', 'fecha_actualizacion', 'huevos_inicio', 'huevos_malos', 'huevos_proceso', 'etapa', 'estado', 'descripcion'
+        'incubacion_id', 'cliente_id', 'fecha_actualizacion', 'huevos_inicio', 'huevos_malos', 'huevos_proceso', 'etapa', 'estado', 'descripcion', 'huevos_eclosionados'
     ];
 
     public static function boot()
@@ -32,40 +32,50 @@ class Actualizacion extends Model
         return $this->belongsTo(Client::class, 'cliente_id');
     }
 
-    
-
     public function save(array $options = [])
     {
-        // Siempre actualizar huevos_proceso en IncubationData antes de guardar la actualización
-        if (isset($this->huevos_inicio) && isset($this->huevos_malos)) {
-            $this->huevos_proceso = $this->huevos_inicio - $this->huevos_malos;
-            $this->incubacion->huevos_proceso = $this->huevos_proceso;
-            $this->incubacion->huevos_malos = $this->huevos_malos;
+        // Asegúrate de que los datos necesarios están cargados
+        $this->load('incubacion');
+    
+        if (isset($this->huevos_malos, $this->huevos_eclosionados)) {
+            // Sumar a los huevos malos existentes
+            $this->incubacion->huevos_malos += $this->huevos_malos;
+            $this->incubacion->huevos_eclosionados+= $this->huevos_eclosionados;
+    
+            // Calcular huevos en proceso basado en el valor previo y los nuevos huevos malos y huevos eclosionados
+            $this->incubacion->huevos_proceso = max(0, $this->incubacion->huevos_proceso - $this->huevos_malos - $this->huevos_eclosionados);
+    
+            // Guardar los cambios en incubacion
             $this->incubacion->etapa = $this->etapa;
             $this->incubacion->estado = $this->estado;
             $this->incubacion->save();
         }
-
-        parent::save($options);
+         
+        // Aquí aseguras que   `huevos_proceso` tiene un valor antes de guardar `Actualizacion`
+        $this->huevos_proceso = $this->incubacion->huevos_proceso;
     
-        if ($this->estado == 'finalizado') {
-            $this->incubacion->fecha_entrega = $this->fecha_actualizacion;
-            $this->incubacion->save();
+        // Procede con el guardado habitual
+        parent::save($options);
 
-            // Calcular los huevos incubados como la diferencia entre huevos_inicio y huevos_malos
-            $huevos_incubados = $this->huevos_inicio - $this->huevos_malos;
+    // Si el estado es 'finalizado', manejar la finalización
+    if ($this->estado == 'finalizado') {
+        $this->incubacion->fecha_entrega = $this->fecha_actualizacion;
+        $this->incubacion->save();
 
-            // Crear entrada en Bitacora
-            Bitacora::create([
-                'incubacion_id' => $this->incubacion_id,
-                'cliente_id' => $this->cliente_id,
-                'huevos_inicio' => $this->huevos_inicio,
-                'huevos_malos' => $this->huevos_malos,
-                'huevos_incubados' => $huevos_incubados,
-                'fecha_recepcion' => $this->incubacion->fecha_recepcion,
-                'fecha_entrega' => $this->fecha_actualizacion,
-                'estado' => $this->estado,
-            ]);
-        }
+        // Registrar el evento en la Bitácora
+        Bitacora::create([
+            'incubacion_id' => $this->incubacion_id,
+            'cliente_id' => $this->cliente_id,
+            'huevos_inicio' => $this->incubacion->cantidad,
+            'huevos_malos' => $this->incubacion->huevos_malos,
+            'huevos_incubados' => $this->incubacion->huevos_eclosionados,
+            'fecha_recepcion' => $this->incubacion->fecha_recepcion,
+            'fecha_entrega' => $this->fecha_actualizacion,
+            'estado' => $this->estado,
+        ]);
     }
+}
+
+
+    
 }

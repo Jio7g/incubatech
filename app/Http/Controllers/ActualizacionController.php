@@ -33,6 +33,7 @@ class ActualizacionController extends Controller
             'fecha_actualizacion' => 'required|date',
             'huevos_inicio' => 'required|integer',
             'huevos_malos' => 'required|integer',
+            'huevos_eclosionados' => 'required|integer',
             'etapa' => 'required|string',
             'estado' => 'required|string',
             'descripcion' => 'required|string'

@@ -12,26 +12,32 @@ class IncubationClientController extends Controller
 {
     public function index()
     {
-        $clientsWithIncubation = Client::has('datosIncubacion')->with('datosIncubacion')->get();
-
+        // Obtener solo los clientes que tienen al menos una incubación no finalizada
+        $clientsWithIncubation = Client::whereHas('datosIncubacion', function($query) {
+            $query->where('estado', '!=', 'finalizado');
+        })->with(['datosIncubacion' => function($query) {
+            $query->where('estado', '!=', 'finalizado');
+        }])->get();
+    
         // Generar el token para cada cliente
         $clientsWithIncubation->each(function ($client) {
             $client->token = sha1($client->id . $client->correo);
         });
-
+    
         return view('incubation_clients.index', compact('clientsWithIncubation'));
     }
+    
     public function show($clientId)
     {
-        $client = Client::with('datosIncubacion')->findOrFail($clientId);
+        $client = Client::with(['datosIncubacion' => function($query) {
+            $query->where('estado', '!=', 'finalizado');
+        }])->findOrFail($clientId);
+    
         $incubations = $client->datosIncubacion;
-
-        if ($incubations === null) {
-            $incubations = collect();
-        }
-
+    
         return view('incubation_clients.show', compact('client', 'incubations'));
     }
+    
 
     public function showSharedIncubation($clientId, $token)
     {

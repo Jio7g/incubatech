@@ -40,16 +40,19 @@ class ClientController extends Controller
         return view('clients.edit', compact('client'));
     }
 
-    public function update(ClientRequest $request, $id)// Utiliza parámetro $id
+    public function update(ClientRequest $request, $id)
     {
-        $client = Client::findOrFail($id);// Encuentra el cliente o falla
-            if (auth()->user()->rol !== 'SuperUsuario') {
-                abort(403, 'Acción no autorizada.');
-            }
-        $data = $request->validated();
-        $client->update($data);
+        if (auth()->user()->rol !== 'SuperUsuario')  { // Asumiendo que estás utilizando alguna librería para manejar roles como Spatie
+            abort(403, 'Acción no autorizada.');
+        }
+    
+        $client = Client::findOrFail($id); // Encuentra el cliente o falla si no existe
+        $data = $request->validated(); // Valida los datos
+        $client->update($data); // Actualiza el cliente con los datos validados
+    
         return redirect()->route('clients.index')->with('success', 'Cliente actualizado con éxito.');
     }
+    
 
 
 

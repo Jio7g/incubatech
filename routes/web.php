@@ -53,7 +53,9 @@ Route::post('/clientes/store', [ClientController::class, 'store'])->name('client
 Route::get('/clientes', [ClientController::class, 'index'])->name('clients.index');
 Route::get('/clientes/{client}/editar', [ClientController::class, 'edit'])->name('clients.edit');
 Route::delete('/clientes/{client}', [ClientController::class, 'destroy'])->name('clients.destroy');
-Route::put('/clientes/{client}', [ClientController::class, 'update'])->name('clients.update');
+// web.php
+Route::put('clientes/{client}', [ClientController::class, 'update'])->name('clients.update');
+
 
 //rutas para datos de incubacion
 
@@ -61,6 +63,13 @@ Route::get('/incubation/create', [IncubationDataController::class, 'create'])->n
 Route::post('/incubation', [IncubationDataController::class, 'store'])->name('incubation.store');
 Route::get('/incubation', [IncubationDataController::class, 'index'])->name('incubation.index'); // Suponiendo que quieras listar los registros
 Route::get('/api/clients', [IncubationDataController::class, 'getClients']);
+Route::get('/incubation/{id}', [IncubationDataController::class, 'show'])->name('incubation.show');
+Route::get('/incubation/{incubationData}/edit', [IncubationDataController::class, 'edit'])->name('incubation.edit');
+Route::delete('/incubation/{incubationData}', [IncubationDataController::class, 'destroy'])->name('incubation.destroy');
+Route::put('/incubation/{id}', [IncubationDataController::class, 'update'])->name('incubation.update');
+// web.php
+Route::get('incubation/{id}/imprimir', [IncubationDataController::class, 'imprimir'])->name('incubation.imprimir');
+
 
 
 
@@ -78,6 +87,11 @@ Route::post('/actualizaciones', [ActualizacionController::class, 'store'])->name
 Route::get('/actualizaciones/create/{id}', [ActualizacionController::class, 'create'])->name('actualizaciones.create');
 
 
+use App\Http\Controllers\BitacoraController;
+
+// Rutas para Bitacora
+Route::get('/historial', [BitacoraController::class, 'index'])->name('bitacoras.index');
+Route::get('/bitacoras/{id}', [BitacoraController::class, 'show'])->name('bitacoras.show');
 
 
 

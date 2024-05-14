@@ -19,7 +19,7 @@ class IncubationData extends Model
      * @var array
      */
     protected $fillable = [
-        'fecha_recepcion', 'cliente_id', 'producto', 'cantidad', 'tipo_huevo', 'numero_bandeja', 'etapa', 'estado', 'descripcion', 'huevos_malos', 'huevos_proceso', 'fecha_entrega'
+        'fecha_recepcion', 'cliente_id', 'producto', 'cantidad', 'tipo_huevo', 'numero_bandeja', 'etapa', 'estado', 'descripcion', 'huevos_malos', 'huevos_proceso','huevos_eclosionados', 'fecha_entrega'
     ];
 
     /**
@@ -31,6 +31,8 @@ class IncubationData extends Model
     {
         return $this->belongsTo(Client::class);
     }
+
+    
 
     public function actualizaciones()
 {
@@ -57,6 +59,17 @@ class IncubationData extends Model
 
     // Suma los huevos malos de todas las actualizaciones
     return $this->actualizaciones()->sum('huevos_malos');
+}
+
+public function getHuevosEclosionadosAttribute()
+{
+    // Si el modelo aún no se ha guardado, devolver el valor original
+    if (!$this->exists) {
+        return $this->attributes['huevos_eclosionados'] ?? 0;
+    }
+
+    // Suma los huevos malos de todas las actualizaciones
+    return $this->actualizaciones()->sum('huevos_eclosionados');
 }
 
 }
