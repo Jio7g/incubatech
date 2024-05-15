@@ -12,13 +12,11 @@
             line-height: 1.6;
             font-size: 14px;
         }
-        .header, .company-details {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+
         .details {
             margin-top: 20px;
         }
+
         @media print {
             .no-print {
                 display: none;
@@ -39,20 +37,63 @@
         font-weight: bold; /* Hace que los títulos de los campos sean en negrita */
         border-bottom: 2px solid black; /* Línea más gruesa para la separación */
     }
+
+    .header {
+    display: flex;
+    align-items: center; /* Alinea verticalmente el logo y los detalles de la empresa */
+    justify-content: flex-start; /* Empieza los elementos desde la izquierda */
+    padding: 0px;
+    width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
+}
+
+.logo {
+    flex: 0 0 auto; /* No permite que el logo crezca o se encoja */
+}
+
+.logo img {
+    margin-top: 30px;
+    width: 300px; /* Ajusta el tamaño del logo según necesites */
+}
+
+.company-details {
+    text-align: center; /* Alinea el texto al centro */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centra el contenido verticalmente dentro del contenedor */
+    align-items: center; /* Centra el contenido horizontalmente dentro del contenedor */
+
+}
+
+.company-details p, .company-details h1, .company-details h2 {
+    margin: 1px 0; /* Reduce el margen superior e inferior */
+    padding: 0; /* Elimina el padding si existe */
+}
+
+
+
 </style>
 
 </head>
 <body>
     <div class="header">
-        <h1>Comprobante de Recepcion de Productos</h1>
-    </div>
+    <div class="logo">
+    @if ($configuracion->logo_empresa)
+    <img src="{{ asset('storage/' . $configuracion->logo_empresa) }}" alt="Logo de la Empresa" style="width: 100px;">
+@else
+    <p>No hay logo disponible.</p>
+@endif
 
-    <div class="company-details">
-        <h2>Nombre de la Empresa</h2>
-        <p>Dirección: Calle Principal #123, Ciudad, País</p>
-        <p>Teléfono: +123 456 7890</p>
-        <p>Email: contacto@empresa.com</p>
     </div>
+    <div class="company-details">
+    <h1>Comprobante de Recepcion de Productos</h1>
+    <h2>{{ $configuracion->nombre_empresa }}</h2> <!-- Asegúrate de que el nombre de la propiedad corresponda a tu modelo -->
+    <p>{{ $configuracion->direccion_empresa }}</p> <!-- Cambia las propiedades según lo definido en tu modelo -->
+    <p>{{ $configuracion->telefono_empresa }}</p>
+    <p>{{ $configuracion->correo_empresa }}</p>
+    </div>
+</div>
+
+
 
     <div class="datos_registros">
         <p><strong>No. Registro</strong> {{ $incubationData->id }}</p>

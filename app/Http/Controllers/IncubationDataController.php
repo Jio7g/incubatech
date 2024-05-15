@@ -7,6 +7,8 @@ use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Http\Requests\IncubationDataRequest;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+use App\Models\Configuracion;
 
 class IncubationDataController extends Controller
 {
@@ -15,10 +17,22 @@ class IncubationDataController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = IncubationData::all();
-        return view('incubation.index', compact('data'));
+        $fechaInicio = $request->input('fecha_inicio', Carbon::today()->toDateString());
+        $fechaFin = $request->input('fecha_fin', Carbon::today()->toDateString());
+        $nombreCliente = $request->input('nombre_cliente');
+
+        $data = IncubationData::whereBetween('fecha_recepcion', [$fechaInicio, $fechaFin])
+                            ->when($nombreCliente, function ($query) use ($nombreCliente) {
+                                return $query->whereHas('cliente', function ($query) use ($nombreCliente) {
+                                    return $query->where('nombre', 'like', '%' . $nombreCliente . '%');
+                                });
+                            })
+                            ->with('cliente')
+                            ->get();
+
+        return view('incubation.index', compact('data', 'fechaInicio', 'fechaFin', 'nombreCliente'));
     }
 
     /**
@@ -50,7 +64,7 @@ class IncubationDataController extends Controller
     {
         $validatedData = $request->validated();
         IncubationData::create($validatedData);
-        return redirect()->route('incubations_clients.index');
+        return redirect()->route('incubation.index');
     }
 
     /**
@@ -116,10 +130,12 @@ class IncubationDataController extends Controller
     // IncubacionController.php
     public function imprimir($id)
     {
-        // Cambia 'client' a 'cliente' para coincidir con la definición del modelo
         $incubationData = IncubationData::with('cliente')->findOrFail($id); 
-        return view('incubation.imprimir', compact('incubationData'));
+        $configuracion = Configuracion::first(); // Asume que solo hay una configuración o obtén la configuración relevante
+    
+        return view('incubation.imprimir', compact('incubationData', 'configuracion'));
     }
+    
     
     
 

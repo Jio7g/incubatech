@@ -77,6 +77,10 @@
                                 <i class="fas fa-history mr-2"></i>
                                 <span>Historial</span>
                             </a>
+                            <a href="{{ route('configuracion.index') }}" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700 transition duration-300">
+                                <i class="fas fa-tools mr-2"></i>
+                                <span>Configuracion</span>
+                            </a>
                             <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700 transition duration-300">
                                 <i class="fas fa-sign-out-alt mr-2"></i>
                                 <span>Cerrar Sesión</span>
@@ -132,6 +136,12 @@
                     <i class="fas fa-history mr-2"></i>
                     <span>Historial</span>
                 </a>
+
+                <a href="{{ route('configuracion.index') }}" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700 transition duration-300">
+                    <i class="fas fa-tools mr-2"></i>
+                    <span>Configuracion</span>
+                </a>
+
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-700 transition duration-300">
                     <i class="fas fa-sign-out-alt mr-2"></i>
                     <span>Cerrar Sesión</span>

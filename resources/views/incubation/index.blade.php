@@ -8,6 +8,7 @@
             <a href="{{ route('incubation.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-4">
                 Agregar Nuevo
             </a>
+
             <div class="relative">
                 <input type="text" id="search" class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Buscar incubación...">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -16,8 +17,23 @@
                     </svg>
                 </div>
             </div>
+
         </div>
     </div>
+
+    <div>
+        <form action="{{ route('incubation.index') }}" method="GET">
+
+        <input type="date" name="fecha_inicio" id="fecha_inicio" value="{{ $fechaInicio }}" class="border border-gray-300 rounded mr-2">
+            <input type="date" name="fecha_fin" id="fecha_fin" value="{{ $fechaFin }}" class="border border-gray-300 rounded mr-2">
+
+            <label for="nombre_cliente">Nombre del Cliente:</label>
+            <input type="text" name="nombre_cliente" placeholder="Buscar por nombre..." value="{{ $nombreCliente }}">
+
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Buscar</button>
+        </form>
+    </div>
+    <br>
 
     @if (session('success'))
     <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
@@ -43,7 +59,6 @@
                             </svg>
                         </th>
                         <th class="px-6 py-3 text-left font-medium text-gray-700 uppercase tracking-wider">Fecha Recepción</th>
-                        <th class="px-6 py-3 text-left font-medium text-gray-700 uppercase tracking-wider">Cliente ID</th>
                         <th class="px-6 py-3 text-left font-medium text-gray-700 uppercase tracking-wider">Código Cliente</th>
                         <th class="px-6 py-3 text-left font-medium text-gray-700 uppercase tracking-wider">Nombre Cliente</th>
                         <th class="px-6 py-3 text-center font-medium text-gray-700 uppercase tracking-wider">Acciones</th>
@@ -54,9 +69,8 @@
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap">{{ $item->id }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ $item->fecha_recepcion }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $item->cliente_id }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $item->cliente_codigo }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $item->cliente_nombre }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $item->cliente->codigo }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $item->cliente->nombre }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-center">
                             <div class="flex justify-center space-x-4">
                                 <a href="{{ route('incubation.show', $item->id) }}" class="text-blue-500 hover:text-blue-600 font-medium">
@@ -132,7 +146,23 @@
         });
     }
 
-    // Evento de búsqueda al presionar una tecla
-    document.querySelector('#search').addEventListener('keyup', searchIncubation);
+
+    function filtrarPorFechas() {
+        const fechaInicio = document.getElementById('fecha_inicio').value;
+        const fechaFin = document.getElementById('fecha_fin').value;
+        const rows = document.querySelectorAll('#incubationTableBody tr');
+
+        rows.forEach(row => {
+            const fechaRecepcion = row.cells[1].textContent;
+            if (fechaRecepcion >= fechaInicio && fechaRecepcion <= fechaFin) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+        // Evento de búsqueda al presionar una tecla
+        document.querySelector('#search').addEventListener('keyup', searchIncubation);
 </script>
 @endsection

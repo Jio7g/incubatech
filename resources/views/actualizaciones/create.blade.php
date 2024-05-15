@@ -45,15 +45,28 @@
                 <label class="block text-gray-700 font-bold mb-2" for="etapa">
                     <i class="fas fa-tasks mr-2"></i> Etapa:
                 </label>
-                <input class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-indigo-500" type="text" name="etapa" id="etapa" value="{{ old('etapa') }}">
+            <select class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-indigo-500" name="etapa" id="etapa" required>
+                <option value="">Seleccione una etapa</option>
+                 <option value="recepcion" {{ old('etapa') == 'recepcion' ? 'selected' : '' }}>Recepción</option>
+                <option value="ovoscopia" {{ old('etapa') == 'ovoscopia' ? 'selected' : '' }}>Ovoscopia</option>
+                <option value="taza fertilidad" {{ old('etapa') == 'taza fertilidad' ? 'selected' : '' }}>Taza de Fertilidad</option>
+                <option value="taza eclosion" {{ old('etapa') == 'taza eclosion' ? 'selected' : '' }}>Taza de Eclosión</option>
+            </select>
             </div>
+
 
             <div class="mb-6">
                 <label class="block text-gray-700 font-bold mb-2" for="estado">
-                    <i class="fas fa-info-circle mr-2"></i> Estado:
+                <i class="fas fa-info-circle mr-2"></i> Estado:
                 </label>
-                <input class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-indigo-500" type="text" name="estado" id="estado" value="{{ old('estado') }}">
+                <select class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-indigo-500" name="estado" id="estado" required>
+                <option value="">Seleccione un estado</option>
+                <option value="recepcion" {{ old('estado') == 'recepcion' ? 'selected' : '' }}>Recepción</option>
+                <option value="en proceso" {{ old('estado') == 'en proceso' ? 'selected' : '' }}>En Proceso</option>
+                <option value="finalizado" {{ old('estado') == 'finalizado' ? 'selected' : '' }}>Finalizado</option>
+                </select>
             </div>
+
 
             <div class="mb-6">
                 <label class="block text-gray-700 font-bold mb-2" for="descripcion">

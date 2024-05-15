@@ -94,6 +94,17 @@ Route::get('/historial', [BitacoraController::class, 'index'])->name('bitacoras.
 Route::get('/bitacoras/{id}', [BitacoraController::class, 'show'])->name('bitacoras.show');
 
 
+use App\Http\Controllers\ConfiguracionController;
+
+// Ruta para mostrar el listado de configuraciones
+Route::get('/configuraciones', [ConfiguracionController::class, 'index'])->name('configuracion.index');
+
+// Rutas para crear una nueva configuración
+Route::get('/configuraciones/crear', [ConfiguracionController::class, 'create'])->name('configuracion.create');
+Route::post('/configuraciones', [ConfiguracionController::class, 'store'])->name('configuracion.store');
+Route::delete('/configruaciones/{configuracion}', [ConfiguracionController::class, 'destroy'])->name('configuracion.destroy');
+Route::get('/configuraciones/{configuracion}/editar', [ConfiguracionController::class, 'edit'])->name('configuracion.edit');
+Route::put('/configuraciones/{configuracion}', [ConfiguracionController::class, 'update'])->name('configuracion.update');
 
 
 

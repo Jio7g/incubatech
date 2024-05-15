@@ -23,8 +23,21 @@
             <input type="number" class="block w-full p-2 border rounded" id="cantidad" name="cantidad" placeholder="Cantidad" required>
             <input type="text" class="block w-full p-2 border rounded" id="tipo_huevo" name="tipo_huevo" placeholder="Tipo de Huevo" required>
             <input type="text" class="block w-full p-2 border rounded" id="numero_bandeja" name="numero_bandeja" placeholder="Número de Bandeja">
-            <input type="text" class="block w-full p-2 border rounded" id="etapa" name="etapa" placeholder="Etapa" required>
-            <input type="text" class="block w-full p-2 border rounded" id="estado" name="estado" placeholder="Estado" required>
+            <select class="block w-full p-2 border rounded" id="etapa" name="etapa" required>
+              <option value="">Seleccione una etapa</option>
+              <option value="Recepción">Recepción</option>
+              <option value="Ovoscopia">Ovoscopia</option>
+              <option value="Taza Fertilidad">Taza de Fertilidad</option>
+              <option value="Taza Eclosion">Taza de Eclosión</option>
+            </select>
+
+            <select class="block w-full p-2 border rounded" id="estado" name="estado" required>
+              <option value="">Seleccione un estado</option>
+              <option value="recepcion">Recepcion</option>
+              <option value="en proceso">En Proceso</option>
+              <option value="finalizado">Finalizado</option>
+            </select>
+
             <textarea class="block w-full p-2 border rounded" id="descripcion" name="descripcion" placeholder="Descripción" required></textarea>
         </div>
 
