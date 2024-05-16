@@ -52,15 +52,31 @@
                         <input type="number" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="numero_bandeja" name="numero_bandeja" value="{{ $incubationData->numero_bandeja }}" required>
                     </div>
 
-                    <div>
-                        <label for="etapa" class="block text-gray-700 font-bold mb-2">Etapa</label>
-                        <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="etapa" name="etapa" value="{{ $incubationData->etapa }}" required>
-                    </div>
+                    <div class="mb-6">
+                <label class="block text-gray-700 font-bold mb-2" for="etapa">
+                    <i class="fas fa-tasks mr-2"></i> Etapa:
+                </label>
+            <select class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-indigo-500" name="etapa" id="etapa" required>
+                <option value="">Seleccione una etapa</option>
+                 <option value="recepcion" {{ old('etapa') == 'recepcion' ? 'selected' : '' }}>Recepción</option>
+                <option value="ovoscopia" {{ old('etapa') == 'ovoscopia' ? 'selected' : '' }}>Ovoscopia</option>
+                <option value="taza fertilidad" {{ old('etapa') == 'taza fertilidad' ? 'selected' : '' }}>Taza de Fertilidad</option>
+                <option value="taza eclosion" {{ old('etapa') == 'taza eclosion' ? 'selected' : '' }}>Taza de Eclosión</option>
+            </select>
+            </div>
 
-                    <div>
-                        <label for="estado" class="block text-gray-700 font-bold mb-2">Estado</label>
-                        <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="estado" name="estado" value="{{ $incubationData->estado }}" required>
-                    </div>
+
+            <div class="mb-6">
+                <label class="block text-gray-700 font-bold mb-2" for="estado">
+                <i class="fas fa-info-circle mr-2"></i> Estado:
+                </label>
+                <select class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-indigo-500" name="estado" id="estado" required>
+                <option value="">Seleccione un estado</option>
+                <option value="recepcion" {{ old('estado') == 'recepcion' ? 'selected' : '' }}>Recepción</option>
+                <option value="en proceso" {{ old('estado') == 'en proceso' ? 'selected' : '' }}>En Proceso</option>
+                <option value="finalizado" {{ old('estado') == 'finalizado' ? 'selected' : '' }}>Finalizado</option>
+                </select>
+            </div>
                 </div>
 
                 <div class="mt-6">
