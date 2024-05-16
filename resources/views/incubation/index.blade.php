@@ -27,8 +27,8 @@
         <input type="date" name="fecha_inicio" id="fecha_inicio" value="{{ $fechaInicio }}" class="border border-gray-300 rounded mr-2">
             <input type="date" name="fecha_fin" id="fecha_fin" value="{{ $fechaFin }}" class="border border-gray-300 rounded mr-2">
 
-            <label for="nombre_cliente">Nombre del Cliente:</label>
-            <input type="text" name="nombre_cliente" placeholder="Buscar por nombre..." value="{{ $nombreCliente }}">
+            {{-- <label for="nombre_cliente">Nombre del Cliente:</label>
+            <input type="text" name="nombre_cliente" placeholder="Buscar por nombre..." value="{{ $nombreCliente }}"> --}}
 
             <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Buscar</button>
         </form>
