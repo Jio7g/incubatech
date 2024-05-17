@@ -4,7 +4,7 @@
 <div class="container mx-auto mt-8">
     <div class="max-w-md mx-auto">
         <div class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
-            <div class="bg-blue-500 text-white py-4 px-6 rounded-t-lg">
+            <div class="bg-gradient-to-r from-gray-800 to-blue-900 text-white py-4 px-6 rounded-t-lg">
                 <h4 class="text-2xl font-bold">Editar Usuario</h4>
             </div>
             <div class="mt-6">
