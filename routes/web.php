@@ -8,7 +8,11 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\IncubationDataController;
 use App\Http\Controllers\IncubationClientController;
-
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ActualizacionController;
+use App\Http\Controllers\BitacoraController;
+use App\Http\Controllers\ConfiguracionController;
+// Rutas accesibles para todos los usuarios (autenticados y no autenticados)
 Route::get('/', function () {
     return view('auth.login');
 })->middleware('guest');
@@ -30,81 +34,52 @@ Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('
 
 Auth::routes(['register' => false]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-use App\Http\Controllers\UserController;
-
-Route::get('/usuarios', [UserController::class, 'index'])->name('users.index');
-Route::get('/usuarios/{user}/editar', [UserController::class, 'edit'])->name('users.edit');
-Route::delete('/usuarios/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-Route::get('/usuarios/{user}/editar', [UserController::class, 'edit'])->name('users.edit');
-Route::put('/usuarios/{user}', [UserController::class, 'update'])->name('users.update');
-// ...
-
-//ruta para crear clientes
-Route::resource('clients', 'ClientController');
-
-// Custom route for creating clients if you want a different URI than '/clients/create'.
-Route::get('/clientes/crear', [ClientController::class, 'create'])->name('clients.create');
-
-// Custom route for storing clients if you want a different URI than '/clients'.
-Route::post('/clientes/store', [ClientController::class, 'store'])->name('clients.store');
-
-Route::get('/clientes', [ClientController::class, 'index'])->name('clients.index');
-Route::get('/clientes/{client}/editar', [ClientController::class, 'edit'])->name('clients.edit');
-Route::delete('/clientes/{client}', [ClientController::class, 'destroy'])->name('clients.destroy');
-// web.php
-Route::put('clientes/{client}', [ClientController::class, 'update'])->name('clients.update');
-
-
-//rutas para datos de incubacion
-
-Route::get('/incubation/create', [IncubationDataController::class, 'create'])->name('incubation.create');
-Route::post('/incubation', [IncubationDataController::class, 'store'])->name('incubation.store');
-Route::get('/incubation', [IncubationDataController::class, 'index'])->name('incubation.index'); // Suponiendo que quieras listar los registros
-Route::get('/api/clients', [IncubationDataController::class, 'getClients']);
-Route::get('/incubation/{id}', [IncubationDataController::class, 'show'])->name('incubation.show');
-Route::get('/incubation/{incubationData}/edit', [IncubationDataController::class, 'edit'])->name('incubation.edit');
-Route::delete('/incubation/{incubationData}', [IncubationDataController::class, 'destroy'])->name('incubation.destroy');
-Route::put('/incubation/{id}', [IncubationDataController::class, 'update'])->name('incubation.update');
-// web.php
-Route::get('incubation/{id}/imprimir', [IncubationDataController::class, 'imprimir'])->name('incubation.imprimir');
-
-
-
-
-//ruta para lista de clientes con incubacion
-Route::get('/incubation-clients', [IncubationClientController::class, 'index'])->name('incubations_clients.index');
-Route::get('/incubations/{client}', [IncubationClientController::class, 'show'])->name('incubations.show');
+// Ruta para compartir incubaciones con clientes (accesible para todos los usuarios)
 Route::get('/incubaciones/compartir/{clientId}/{token}', [IncubationClientController::class, 'showSharedIncubation'])->name('incubations.shared');
-Route::get('/incubaciones/compartir/{clientId}', [IncubationClientController::class, 'generateShareLink'])->name('incubations.share');
 
+// Rutas protegidas solo para usuarios autenticados
+Route::middleware('auth')->group(function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-use App\Http\Controllers\ActualizacionController;
+    Route::get('/usuarios', [UserController::class, 'index'])->name('users.index');
+    Route::get('/usuarios/{user}/editar', [UserController::class, 'edit'])->name('users.edit');
+    Route::delete('/usuarios/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::get('/usuarios/{user}/editar', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/usuarios/{user}', [UserController::class, 'update'])->name('users.update');
 
-Route::get('/actualizaciones', [ActualizacionController::class, 'index'])->name('actualizaciones.index');
-Route::post('/actualizaciones', [ActualizacionController::class, 'store'])->name('actualizaciones.store');
-Route::get('/actualizaciones/create/{id}', [ActualizacionController::class, 'create'])->name('actualizaciones.create');
+    Route::resource('clients', 'ClientController');
+    Route::get('/clientes/crear', [ClientController::class, 'create'])->name('clients.create');
+    Route::post('/clientes/store', [ClientController::class, 'store'])->name('clients.store');
+    Route::get('/clientes', [ClientController::class, 'index'])->name('clients.index');
+    Route::get('/clientes/{client}/editar', [ClientController::class, 'edit'])->name('clients.edit');
+    Route::delete('/clientes/{client}', [ClientController::class, 'destroy'])->name('clients.destroy');
+    Route::put('clientes/{client}', [ClientController::class, 'update'])->name('clients.update');
 
+    Route::get('/incubation/create', [IncubationDataController::class, 'create'])->name('incubation.create');
+    Route::post('/incubation', [IncubationDataController::class, 'store'])->name('incubation.store');
+    Route::get('/incubation', [IncubationDataController::class, 'index'])->name('incubation.index');
+    Route::get('/api/clients', [IncubationDataController::class, 'getClients']);
+    Route::get('/incubation/{id}', [IncubationDataController::class, 'show'])->name('incubation.show');
+    Route::get('/incubation/{incubationData}/edit', [IncubationDataController::class, 'edit'])->name('incubation.edit');
+    Route::delete('/incubation/{incubationData}', [IncubationDataController::class, 'destroy'])->name('incubation.destroy');
+    Route::put('/incubation/{id}', [IncubationDataController::class, 'update'])->name('incubation.update');
+    Route::get('incubation/{id}/imprimir', [IncubationDataController::class, 'imprimir'])->name('incubation.imprimir');
 
-use App\Http\Controllers\BitacoraController;
+    Route::get('/incubation-clients', [IncubationClientController::class, 'index'])->name('incubations_clients.index');
+    Route::get('/incubations/{client}', [IncubationClientController::class, 'show'])->name('incubations.show');
+    Route::get('/incubaciones/compartir/{clientId}', [IncubationClientController::class, 'generateShareLink'])->name('incubations.share');
 
-// Rutas para Bitacora
-Route::get('/historial', [BitacoraController::class, 'index'])->name('bitacoras.index');
-Route::get('/bitacoras/{id}', [BitacoraController::class, 'show'])->name('bitacoras.show');
+    Route::get('/actualizaciones', [ActualizacionController::class, 'index'])->name('actualizaciones.index');
+    Route::post('/actualizaciones', [ActualizacionController::class, 'store'])->name('actualizaciones.store');
+    Route::get('/actualizaciones/create/{id}', [ActualizacionController::class, 'create'])->name('actualizaciones.create');
 
+    Route::get('/historial', [BitacoraController::class, 'index'])->name('bitacoras.index');
+    Route::get('/bitacoras/{id}', [BitacoraController::class, 'show'])->name('bitacoras.show');
 
-use App\Http\Controllers\ConfiguracionController;
-
-// Ruta para mostrar el listado de configuraciones
-Route::get('/configuraciones', [ConfiguracionController::class, 'index'])->name('configuracion.index');
-
-// Rutas para crear una nueva configuración
-Route::get('/configuraciones/crear', [ConfiguracionController::class, 'create'])->name('configuracion.create');
-Route::post('/configuraciones', [ConfiguracionController::class, 'store'])->name('configuracion.store');
-Route::delete('/configruaciones/{configuracion}', [ConfiguracionController::class, 'destroy'])->name('configuracion.destroy');
-Route::get('/configuraciones/{configuracion}/editar', [ConfiguracionController::class, 'edit'])->name('configuracion.edit');
-Route::put('/configuraciones/{configuracion}', [ConfiguracionController::class, 'update'])->name('configuracion.update');
-
-
-
+    Route::get('/configuraciones', [ConfiguracionController::class, 'index'])->name('configuracion.index');
+    Route::get('/configuraciones/crear', [ConfiguracionController::class, 'create'])->name('configuracion.create');
+    Route::post('/configuraciones', [ConfiguracionController::class, 'store'])->name('configuracion.store');
+    Route::delete('/configruaciones/{configuracion}', [ConfiguracionController::class, 'destroy'])->name('configuracion.destroy');
+    Route::get('/configuraciones/{configuracion}/editar', [ConfiguracionController::class, 'edit'])->name('configuracion.edit');
+    Route::put('/configuraciones/{configuracion}', [ConfiguracionController::class, 'update'])->name('configuracion.update');
+});
