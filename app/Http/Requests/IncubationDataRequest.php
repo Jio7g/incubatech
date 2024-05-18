@@ -36,6 +36,7 @@ class IncubationDataRequest extends FormRequest
             'huevos_malos' => 'nullable',
             'huevos_eclosionados' => 'nullable',
             'huevos_proceso' => 'nullable',
+            'fecha_estimada' => 'required',
         ];
     }
 
@@ -54,6 +55,7 @@ class IncubationDataRequest extends FormRequest
             'cantidad.numeric' => 'La cantidad debe ser un valor numérico.',
             'tipo_huevo.required' => 'El tipo de huevo es obligatorio.',
             'numero_bandeja.required' => 'El número de bandeja es obligatorio.',
+            'fecha_estimada' => 'La fecha estimada de entrega es obligatoria.',
             // Añade más mensajes de error personalizados según necesites
         ];
     }
