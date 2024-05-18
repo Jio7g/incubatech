@@ -33,16 +33,13 @@
                         <div class="text-sm text-gray-500">{{ $client->direccion }}</div>
                     </div>
                     <div class="mt-4 md:mt-0 md:ml-auto">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <a href="{{ route('incubations.show', $client->id) }}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded text-center">
                                 Ver Incubaciones
                             </a>
                             <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-center" onclick="openConfirmationModal({{ $client->id }}, '{{ $client->nombre }}', '{{ $client->correo }}')">
                                 Compartir
                             </button>
-                            <a href="#" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded text-center">
-                                Imprimir
-                            </a>
                         </div>
                     </div>
                 </div>

@@ -20,8 +20,8 @@
                         <span class="ml-2">{{ $incubationData->fecha_recepcion }}</span>
                     </div>
                     <div class="mb-2">
-                        <span class="font-semibold">Fecha de Entrega:</span>
-                        <span class="ml-2">{{ $incubationData->fecha_entrega }}</span>
+                        <span class="font-semibold">Fecha Estimada de Entrega:</span>
+                        <span class="ml-2">{{ $incubationData->fecha_estimada }}</span>
                     </div>
                 </div>
                 <div class="bg-gray-100 rounded-lg p-4">
@@ -39,7 +39,7 @@
                         <span class="ml-2">{{ $incubationData->cantidad }}</span>
                     </div>
                     <div class="mb-2">
-                        <span class="font-semibold">Huevos Malos:</span>
+                        <span class="font-semibold">Huevos No Fértiles:</span>
                         <span class="ml-2">{{ $incubationData->huevos_malos }}</span>
                     </div>
                     <div class="mb-2">
@@ -47,7 +47,7 @@
                         <span class="ml-2">{{ $incubationData->huevos_eclosionados }}</span>
                     </div>
                     <div class="mb-2">
-                        <span class="font-semibold">Huevos Incubados:</span>
+                        <span class="font-semibold">Huevos en Incubación:</span>
                         <span class="ml-2">{{ $incubationData->huevos_proceso }}</span>
                     </div>
                 </div>
