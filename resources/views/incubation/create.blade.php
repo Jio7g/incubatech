@@ -4,21 +4,61 @@
 <div class="container mx-auto px-4">
     <h1 class="text-xl font-bold my-4">Agregar Datos de Incubación</h1>
 
-    <form action="{{ route('incubation.store') }}" method="POST" class="space-y-4">
+    <form id="incubationForm" action="{{ route('incubation.store') }}" method="POST" class="space-y-4">
         @csrf
 
-        <!-- Botón para abrir el modal -->
-        <button type="button" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700" onclick="openModal()">
-            Buscar Cliente
-        </button>
+<div class="grid grid-cols-3 gap-4">
+          
+        <input type="hidden" id="cliente_id" name="cliente_id">
+        <div>
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="fecha_recepcion">
+                Fecha Recepción:
+            </label>
+            <input type="date" id="fecha_recepcion" name="fecha_recepcion" class="block w-full p-2 border rounded">
+        </div>
+        <div>
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="fecha_estimada">
+                Fecha Estimmada de Entrega:
+            </label>
+            <input type="date" id="fecha_estimada" name="fecha_estimada" class="block w-full p-2 border rounded">
+        </div>
+        <div class="col-span-2">
+            <label class="block text-gray-700 text-sm font-bold mb-2">
+                Datos del Cliente
+            </label>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <input type="text" id="nombre" name="nombre" placeholder="Nombre Cliente" class="block w-full p-2 border rounded">
+                </div>
+                <div>
+                    <input type="text" id="telefono" name="telefono" placeholder="Teléfono" class="block w-full p-2 border rounded">
+                </div>
+                <div class="col-span-2">
+                    <input type="text" id="direccion" name="direccion" placeholder="Dirección Cliente" class="block w-full p-2 border rounded">
+                </div>
+                <div class="col-span-2">
+                    <input type="text" id="correo" name="correo" placeholder="Correo" class="block w-full p-2 border rounded">
+                </div>
+                <div class="col-span-1">
+                    <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full" onclick="openModal()">
+                        Buscar Cliente
+                    </button>
+                </div>
+                <div class="col-span-1">
+                <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full" onclick="clearClientFields()">
+                    Borrar Campos
+                </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 
         <div class="space-y-2">
-            <input type="date" id="fecha_recepcion" name="fecha_recepcion" class="block w-full p-2 border rounded">
-            <input type="text" id="nombre" name="nombre" placeholder="Nombre" class="block w-full p-2 border rounded">
-            <input type="text" id="direccion" name="direccion" placeholder="Dirección" class="block w-full p-2 border rounded">
-            <input type="text" id="telefono" name="telefono" placeholder="Teléfono" class="block w-full p-2 border rounded">
-            <input type="text" id="correo" name="correo" placeholder="Correo" class="block w-full p-2 border rounded">
-            <input type="hidden" id="cliente_id" name="cliente_id" required>
+        <label class="block text-gray-700 text-sm font-bold mb-2">
+                Detalle de la Recepción
+            </label>
             <input type="text" class="block w-full p-2 border rounded" id="producto" name="producto" placeholder="Producto" required>
             <input type="number" class="block w-full p-2 border rounded" id="cantidad" name="cantidad" placeholder="Cantidad" required>
             <input type="text" class="block w-full p-2 border rounded" id="tipo_huevo" name="tipo_huevo" placeholder="Tipo de Huevo" required>
@@ -39,7 +79,7 @@
             </select>
 
             <textarea class="block w-full p-2 border rounded" id="descripcion" name="descripcion" placeholder="Descripción" required></textarea>
-        </div>
+
 
         <button type="submit" class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700">Guardar</button>
     </form>
@@ -109,72 +149,35 @@
 
 
 <script>
-// Función para abrir el modal y cargar la lista de clientes
 function openModal() {
   document.getElementById('clienteModal').classList.remove('hidden');
-  fetchClients();  // Llamada a la función que carga los datos de los clientes
 }
 
-// Función para cerrar el modal
 function closeModal() {
   document.getElementById('clienteModal').classList.add('hidden');
 }
 
-// Función para cargar los clientes desde el servidor
-function fetchClients() {
-  fetch('/api/clients')
-    .then(response => response.json())
-    .then(clients => {
-      const clientListContainer = document.getElementById('client-list');
-      clientListContainer.innerHTML = ''; // Limpiar lista anterior
-      clients.forEach(client => {
-        const clientRow = document.createElement('div');
-        clientRow.className = 'p-2 hover:bg-gray-200 cursor-pointer';
-        clientRow.textContent = `${client.codigo} - ${client.nombre} - ${client.direccion}`;
-        clientRow.onclick = function() {
-          selectClient(client);
-        };
-        clientListContainer.appendChild(clientRow);
-      });
-    })
-    .catch(error => {
-      console.error('Error loading the clients:', error);
-    });
-}
-
 function selectClientFromData(element) {
-    // Extrae los datos almacenados en el atributo 'data-client'
-    const clientData = element.getAttribute('data-client');
-    
-    // Parsea el JSON a un objeto de JavaScript
-    const client = JSON.parse(clientData);
-    
-    // Llama a la función 'selectClient' con el objeto cliente parseado
-    selectClient(client);
-}
+  const clientData = element.getAttribute('data-client');
+  const client = JSON.parse(clientData);
 
-// Función para seleccionar un cliente y llenar los campos del formulario
-function selectClient(client) {
+  // Asegúrate de que los IDs aquí coincidan con los de tus inputs en el HTML
   document.getElementById('cliente_id').value = client.id;
   document.getElementById('nombre').value = client.nombre;
   document.getElementById('direccion').value = client.direccion;
   document.getElementById('telefono').value = client.telefono;
   document.getElementById('correo').value = client.correo;
+
   closeModal();
 }
 
-
-//javascript para filtrar clientes por nombre
+// Añade la función para filtrar clientes en la búsqueda
 document.getElementById('searchClientInput').addEventListener('keyup', function() {
-  let input = this.value.toLowerCase();
-  let rows = document.querySelectorAll('#clientsTableBody tr');
+  const input = this.value.toLowerCase();
+  const rows = document.querySelectorAll('#clientsTableBody tr');
   rows.forEach(row => {
-    let clientName = row.cells[1].textContent.toLowerCase(); // Asume que el nombre del cliente está en la segunda celda
-    if (clientName.includes(input)) {
-      row.style.display = "";
-    } else {
-      row.style.display = "none";
-    }
+    const clientName = row.cells[1].textContent.toLowerCase();
+    row.style.display = clientName.includes(input) ? "" : "none";
   });
 });
 
@@ -188,6 +191,30 @@ document.addEventListener("DOMContentLoaded", function() {
     today = yyyy + '-' + mm + '-' + dd;
     fechaCreacionInput.value = today;
 });
+
+function clearClientFields() {
+    // Obtén todos los elementos input, select y textarea dentro del formulario
+    const inputs = document.querySelectorAll('#incubationForm input, #incubationForm select, #incubationForm textarea');
+
+    // Itera sobre cada elemento y restablece su valor
+    inputs.forEach(input => {
+        switch (input.type) {
+            case 'checkbox':
+            case 'radio':
+                // Restablece checkboxes y radios a su estado no marcado por defecto
+                input.checked = false;
+                break;
+            case 'date':
+                // Opcional: Restablece las fechas a una fecha específica o déjalas en blanco
+                input.value = '';  // Vacío, o puedes usar una fecha por defecto
+                break;
+            default:
+                // Restablece el valor de todos los demás tipos de input y de textarea
+                input.value = '';
+                break;
+        }
+    });
+}
 
 
 

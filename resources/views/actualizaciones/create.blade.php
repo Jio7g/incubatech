@@ -29,7 +29,7 @@
 
             <div class="mb-6">
                 <label class="block text-gray-700 font-bold mb-2" for="huevos_malos">
-                    <i class="fas fa-times-circle mr-2"></i> Huevos Malos:
+                    <i class="fas fa-times-circle mr-2"></i> Huevos No Fertiles:
                 </label>
                 <input class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-indigo-500" type="number" name="huevos_malos" id="huevos_malos" value="{{ old('huevos_malos') }}">
             </div>

@@ -79,6 +79,11 @@
             </div>
                 </div>
 
+                <div>
+                        <label for="fecha_estimada" class="block text-gray-700 font-bold mb-2">Fecha Estimada</label>
+                        <input type="date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fecha_estimada" name="fecha_estimada" value="{{ $incubationData->fecha_estimada }}" required>
+                </div>
+
                 <div class="mt-6">
                     <label for="descripcion" class="block text-gray-700 font-bold mb-2">Descripción</label>
                     <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="descripcion" name="descripcion" rows="3" required>{{ $incubationData->descripcion }}</textarea>

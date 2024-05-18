@@ -72,6 +72,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/actualizaciones', [ActualizacionController::class, 'index'])->name('actualizaciones.index');
     Route::post('/actualizaciones', [ActualizacionController::class, 'store'])->name('actualizaciones.store');
     Route::get('/actualizaciones/create/{id}', [ActualizacionController::class, 'create'])->name('actualizaciones.create');
+    Route::get('/actualizaciones/{incubacion_id}', [ActualizacionController::class, 'index'])->name('actualizaciones.index');
+
 
     Route::get('/historial', [BitacoraController::class, 'index'])->name('bitacoras.index');
     Route::get('/bitacoras/{id}', [BitacoraController::class, 'show'])->name('bitacoras.show');

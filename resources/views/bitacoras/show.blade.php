@@ -21,7 +21,7 @@
                     <p class="text-gray-600">{{ $bitacora->huevos_inicio }}</p>
                 </div>
                 <div class="bg-gray-100 rounded-lg p-4 sm:p-6">
-                    <h3 class="text-xl font-semibold mb-2">Huevos Malos</h3>
+                    <h3 class="text-xl font-semibold mb-2">Huevos No Fertiles</h3>
                     <p class="text-gray-600">{{ $bitacora->huevos_malos }}</p>
                 </div>
                 <div class="bg-gray-100 rounded-lg p-4 sm:p-6">

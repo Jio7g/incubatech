@@ -9,11 +9,15 @@ use Illuminate\Http\Request;
 
 class ActualizacionController extends Controller
 {
-    public function index()
+    public function index($incubacion_id)
     {
-        $actualizaciones = Actualizacion::all();
-        return view('actualizaciones.index', compact('actualizaciones'));
+        $incubacion = IncubationData::findOrFail($incubacion_id);
+        $actualizaciones = Actualizacion::where('incubacion_id', $incubacion_id)->get();
+        
+        return view('actualizaciones.index', compact('incubacion', 'actualizaciones'));
     }
+    
+    
 
     public function create($incubacion_id)
     {

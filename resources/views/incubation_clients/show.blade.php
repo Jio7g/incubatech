@@ -37,7 +37,7 @@
                         <th class="px-6 py-3 text-left font-medium text-gray-700 uppercase tracking-wider">No. Bandeja</th>
                         <th class="px-6 py-3 text-left font-medium text-gray-700 uppercase tracking-wider">Etapa</th>
                         <th class="px-6 py-3 text-left font-medium text-gray-700 uppercase tracking-wider">Estado</th>
-                        <th class="px-6 py-3 text-left font-medium text-gray-700 uppercase tracking-wider">Huevos Malos</th>
+                        <th class="px-6 py-3 text-left font-medium text-gray-700 uppercase tracking-wider">Huevos No Fertiles</th>
                         <th class="px-6 py-3 text-left font-medium text-gray-700 uppercase tracking-wider">Huevos Eclosionados</th>
                         <th class="px-6 py-3 text-left font-medium text-gray-700 uppercase tracking-wider">Huevos en Proceso</th>
                         <th class="px-6 py-3 text-center font-medium text-gray-700 uppercase tracking-wider">Acciones</th>
@@ -60,6 +60,11 @@
                         <a href="{{ route('actualizaciones.create', $incubation->id) }}"
                         class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">Actualizar
                         </a>
+
+                        <a href="{{ route('actualizaciones.index', ['incubacion_id' => $incubation->id]) }}"
+   class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Ver Actualizaciones
+</a>
+
 
                         </td>
                     </tr>

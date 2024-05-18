@@ -98,6 +98,8 @@
     <div class="datos_registros">
         <p><strong>No. Registro</strong> {{ $incubationData->id }}</p>
         <p><strong>Fecha Recepción:</strong> {{ $incubationData->fecha_recepcion }}</p>
+        <p><strong>Fecha Estimada de Entrega:</strong> {{ $incubationData->fecha_estimada }}</p>
+
     </div>
 
     <h2>Datos del Cliente</h2>
