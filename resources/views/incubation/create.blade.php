@@ -8,7 +8,7 @@
         @csrf
 
 <div class="grid grid-cols-3 gap-4">
-          
+
         <input type="hidden" id="cliente_id" name="cliente_id">
         <div>
             <label class="block text-gray-700 text-sm font-bold mb-2" for="fecha_recepcion">
@@ -21,6 +21,9 @@
                 Fecha Estimmada de Entrega:
             </label>
             <input type="date" id="fecha_estimada" name="fecha_estimada" class="block w-full p-2 border rounded">
+            @error('fecha_estimada')
+            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+            @enderror
         </div>
         <div class="col-span-2">
             <label class="block text-gray-700 text-sm font-bold mb-2">
@@ -59,26 +62,19 @@
         <label class="block text-gray-700 text-sm font-bold mb-2">
                 Detalle de la Recepción
             </label>
-            <input type="text" class="block w-full p-2 border rounded" id="producto" name="producto" placeholder="Producto" required>
-            <input type="number" class="block w-full p-2 border rounded" id="cantidad" name="cantidad" placeholder="Cantidad" required>
-            <input type="text" class="block w-full p-2 border rounded" id="tipo_huevo" name="tipo_huevo" placeholder="Tipo de Huevo" required>
-            <input type="text" class="block w-full p-2 border rounded" id="numero_bandeja" name="numero_bandeja" placeholder="Número de Bandeja">
-            <select class="block w-full p-2 border rounded" id="etapa" name="etapa" required>
-              <option value="">Seleccione una etapa</option>
+            <input type="text" class="block w-full p-2 border rounded" id="producto" name="producto" placeholder="Producto" value="{{ old('producto') }}" required>
+            <input type="number" class="block w-full p-2 border rounded" id="cantidad" name="cantidad" placeholder="Cantidad" value="{{ old('cantidad') }}" required>
+            <input type="text" class="block w-full p-2 border rounded" id="tipo_huevo" name="tipo_huevo" placeholder="Tipo de Huevo" value="{{ old('tipo_huevo') }}" required>
+            <input type="text" class="block w-full p-2 border rounded" id="numero_bandeja" name="numero_bandeja" placeholder="Número de Bandeja" value="{{ old('numero_bandeja') }}">
+            <select class="block w-full p-2 border rounded" id="etapa" name="etapa" value="{{ old('etapa') }}" required>
               <option value="Recepción">Recepción</option>
-              <option value="Ovoscopia">Ovoscopia</option>
-              <option value="Taza Fertilidad">Taza de Fertilidad</option>
-              <option value="Taza Eclosion">Taza de Eclosión</option>
             </select>
 
-            <select class="block w-full p-2 border rounded" id="estado" name="estado" required>
-              <option value="">Seleccione un estado</option>
+            <select class="block w-full p-2 border rounded" id="estado" name="estado" value="{{ old('estado') }}" required>
               <option value="recepcion">Recepcion</option>
-              <option value="en proceso">En Proceso</option>
-              <option value="finalizado">Finalizado</option>
             </select>
 
-            <textarea class="block w-full p-2 border rounded" id="descripcion" name="descripcion" placeholder="Descripción" required></textarea>
+            <textarea class="block w-full p-2 border rounded" id="descripcion" name="descripcion" placeholder="Descripción" value="{{ old('descripcion') }}" required></textarea>
 
 
         <button type="submit" class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700">Guardar</button>
