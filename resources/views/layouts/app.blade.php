@@ -87,7 +87,7 @@
         </aside>
         @endauth
         <!-- Contenido principal -->
-        <main class="flex-1 p-6 transition-transform duration-300 ease-in-out" :class="{'md:ml-54': open, 'ml-0': !open}">
+        <main class="flex-1 transition-transform duration-300 ease-in-out" :class="{'md:ml-54': open, 'ml-0': !open}" @class(['p-6' => !Route::is('login')])">
             <!-- Botón para abrir el menú en dispositivos móviles -->
             <button @click="open = !open" class="md:hidden fixed top-4 right-4 inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500">
                 <span class="sr-only">Abrir menú</span>
