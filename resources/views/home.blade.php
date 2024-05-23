@@ -28,22 +28,33 @@
 
         <!-- Accesos rápidos -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            @if (auth()->user()->rol === 'SuperUsuario' || auth()->user()->rol === 'Administrador')
             <a href="{{ route('users.index') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg flex items-center justify-center transition duration-300">
                 <i class="fas fa-users fa-2x mr-4"></i>
                 <span>Gestionar Usuarios</span>
             </a>
+            @endif
+
+            @if (auth()->user()->rol === 'SuperUsuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'Usuario')
             <a href="{{ route('clients.index') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-lg flex items-center justify-center transition duration-300">
                 <i class="fas fa-address-book fa-2x mr-4"></i>
                 <span>Gestionar Clientes</span>
             </a>
+            @endif
+
+            @if (auth()->user()->rol === 'SuperUsuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'Usuario')
             <a href="{{ route('incubation.create') }}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-4 px-6 rounded-lg flex items-center justify-center transition duration-300">
                 <i class="fas fa-plus-circle fa-2x mr-4"></i>
                 <span>Registrar Incubación</span>
             </a>
+            @endif
+
+            @if (auth()->user()->rol === 'SuperUsuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'Usuario')
             <a href="{{ route('incubations_clients.index') }}" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-4 px-6 rounded-lg flex items-center justify-center transition duration-300">
                 <i class="fas fa-egg fa-2x mr-4"></i>
                 <span>Ver Incubaciones</span>
             </a>
+            @endif
         </div>
 
         <!-- Gráfico de incubaciones por etapa -->

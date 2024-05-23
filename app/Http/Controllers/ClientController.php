@@ -11,60 +11,71 @@ class ClientController extends Controller
 {
     public function index()
     {
-        $clients = Client::all();
-        return view('clients.index', compact('clients'));
+        // Verificar si el usuario tiene el rol de Usuario, Administrador o SuperUsuario
+        if (auth()->user()->rol === 'Usuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
+            $clients = Client::all();
+            return view('clients.index', compact('clients'));
+        }
+
+        abort(403, 'Acción no autorizada.');
     }
 
     public function create()
     {
-        // Asumiendo que quieres relacionar clientes con usuarios
-        $users = User::all();
-        return view('clients.create', compact('users'));
+        // Verificar si el usuario tiene el rol de Usuario, Administrador o SuperUsuario
+        if (auth()->user()->rol === 'Usuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
+            $users = User::all();
+            return view('clients.create', compact('users'));
+        }
+
+        abort(403, 'Acción no autorizada.');
     }
 
     public function store(ClientRequest $request)
     {
-        $data = $request->validated();
-        $data['usuario_id'] = auth()->id();
-        Client::create($data);
-        return redirect()->route('clients.index')->with('success', 'Cliente creado con éxito.');
-    }
-
-    public function edit($id) // Utiliza parámetro $id para una mayor claridad en la demostración
-    {
-        $client = Client::findOrFail($id); // Asegúrate de manejar la excepción si no se encuentra el cliente
-        if (auth()->user()->rol !== 'SuperUsuario') {
-            abort(403, 'Acción no autorizada.');
+        // Verificar si el usuario tiene el rol de Usuario, Administrador o SuperUsuario
+        if (auth()->user()->rol === 'Usuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
+            $data = $request->validated();
+            $data['usuario_id'] = auth()->id();
+            Client::create($data);
+            return redirect()->route('clients.index')->with('success', 'Cliente creado con éxito.');
         }
 
-        return view('clients.edit', compact('client'));
+        abort(403, 'Acción no autorizada.');
+    }
+
+    public function edit($id)
+    {
+        // Verificar si el usuario tiene el rol de Administrador o SuperUsuario
+        if (auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
+            $client = Client::findOrFail($id);
+            return view('clients.edit', compact('client'));
+        }
+
+        abort(403, 'Acción no autorizada.');
     }
 
     public function update(ClientRequest $request, $id)
     {
-        if (auth()->user()->rol !== 'SuperUsuario')  { // Asumiendo que estás utilizando alguna librería para manejar roles como Spatie
-            abort(403, 'Acción no autorizada.');
+        // Verificar si el usuario tiene el rol de Administrador o SuperUsuario
+        if (auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
+            $client = Client::findOrFail($id);
+            $data = $request->validated();
+            $client->update($data);
+            return redirect()->route('clients.index')->with('success', 'Cliente actualizado con éxito.');
         }
-    
-        $client = Client::findOrFail($id); // Encuentra el cliente o falla si no existe
-        $data = $request->validated(); // Valida los datos
-        $client->update($data); // Actualiza el cliente con los datos validados
-    
-        return redirect()->route('clients.index')->with('success', 'Cliente actualizado con éxito.');
+
+        abort(403, 'Acción no autorizada.');
     }
-    
-
-
 
     public function destroy(Client $client)
     {
-        // Verificar si el usuario actual tiene el rol de SuperUsuario
-        if (auth()->user()->rol !== 'SuperUsuario') {
-            abort(403, 'Acción no autorizada.');
+        // Verificar si el usuario tiene el rol de SuperUsuario
+        if (auth()->user()->rol === 'SuperUsuario') {
+            $client->delete();
+            return redirect()->route('clients.index')->with('success', 'Cliente eliminado con éxito.');
         }
-        $client->delete();
-        return redirect()->route('clients.index')->with('success', 'Cliente eliminado con éxito.');
+
+        abort(403, 'Acción no autorizada.');
     }
-
-
 }

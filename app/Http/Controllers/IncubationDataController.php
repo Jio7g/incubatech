@@ -19,20 +19,25 @@ class IncubationDataController extends Controller
      */
     public function index(Request $request)
     {
-        $fechaInicio = $request->input('fecha_inicio', Carbon::today()->toDateString());
-        $fechaFin = $request->input('fecha_fin', Carbon::today()->toDateString());
-        $nombreCliente = $request->input('nombre_cliente');
+        // Verificar si el usuario tiene el rol de Usuario, Administrador o SuperUsuario
+        if (auth()->user()->rol === 'Usuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
+            $fechaInicio = $request->input('fecha_inicio', Carbon::today()->toDateString());
+            $fechaFin = $request->input('fecha_fin', Carbon::today()->toDateString());
+            $nombreCliente = $request->input('nombre_cliente');
 
-        $data = IncubationData::whereBetween('fecha_recepcion', [$fechaInicio, $fechaFin])
-                            ->when($nombreCliente, function ($query) use ($nombreCliente) {
-                                return $query->whereHas('cliente', function ($query) use ($nombreCliente) {
-                                    return $query->where('nombre', 'like', '%' . $nombreCliente . '%');
-                                });
-                            })
-                            ->with('cliente')
-                            ->get();
+            $data = IncubationData::whereBetween('fecha_recepcion', [$fechaInicio, $fechaFin])
+                                ->when($nombreCliente, function ($query) use ($nombreCliente) {
+                                    return $query->whereHas('cliente', function ($query) use ($nombreCliente) {
+                                        return $query->where('nombre', 'like', '%' . $nombreCliente . '%');
+                                    });
+                                })
+                                ->with('cliente')
+                                ->get();
 
-        return view('incubation.index', compact('data', 'fechaInicio', 'fechaFin', 'nombreCliente'));
+            return view('incubation.index', compact('data', 'fechaInicio', 'fechaFin', 'nombreCliente'));
+        }
+
+        abort(403, 'Acción no autorizada.');
     }
 
     /**
@@ -42,8 +47,13 @@ class IncubationDataController extends Controller
      */
     public function create()
     {
-        $clients = Client::all();
-        return view('incubation.create', compact('clients'));
+        // Verificar si el usuario tiene el rol de Usuario, Administrador o SuperUsuario
+        if (auth()->user()->rol === 'Usuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
+            $clients = Client::all();
+            return view('incubation.create', compact('clients'));
+        }
+
+        abort(403, 'Acción no autorizada.');
     }
 
     /**
@@ -53,8 +63,13 @@ class IncubationDataController extends Controller
      */
     public function getClients()
     {
-        $clients = Client::all();
-        return response()->json($clients);
+        // Verificar si el usuario tiene el rol de Usuario, Administrador o SuperUsuario
+        if (auth()->user()->rol === 'Usuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
+            $clients = Client::all();
+            return response()->json($clients);
+        }
+
+        abort(403, 'Acción no autorizada.');
     }
 
     /**
@@ -62,9 +77,14 @@ class IncubationDataController extends Controller
      */
     public function store(IncubationDataRequest $request)
     {
-        $validatedData = $request->validated();
-        IncubationData::create($validatedData);
-        return redirect()->route('incubation.index');
+        // Verificar si el usuario tiene el rol de Usuario, Administrador o SuperUsuario
+        if (auth()->user()->rol === 'Usuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
+            $validatedData = $request->validated();
+            IncubationData::create($validatedData);
+            return redirect()->route('incubation.index');
+        }
+
+        abort(403, 'Acción no autorizada.');
     }
 
     /**
@@ -75,8 +95,13 @@ class IncubationDataController extends Controller
      */
     public function show($id)
     {
-        $incubationData = IncubationData::with('cliente')->findOrFail($id);
-        return view('incubation.show', compact('incubationData'));
+        // Verificar si el usuario tiene el rol de Usuario, Administrador o SuperUsuario
+        if (auth()->user()->rol === 'Usuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
+            $incubationData = IncubationData::with('cliente')->findOrFail($id);
+            return view('incubation.show', compact('incubationData'));
+        }
+
+        abort(403, 'Acción no autorizada.');
     }
 
     /**
@@ -87,30 +112,37 @@ class IncubationDataController extends Controller
      */
     public function edit(IncubationData $incubationData)
     {
-        $clients = Client::all();
-        return view('incubation.edit', compact('incubationData', 'clients'));
+        // Verificar si el usuario tiene el rol de Usuario, Administrador o SuperUsuario
+        if (auth()->user()->rol === 'Usuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
+            $clients = Client::all();
+            return view('incubation.edit', compact('incubationData', 'clients'));
+        }
+
+        abort(403, 'Acción no autorizada.');
     }
 
     /**
      * Actualiza los datos de incubación especificados en el almacenamiento.
      */
+    public function update(IncubationDataRequest $request, $id)
+    {
+        // Verificar si el usuario tiene el rol de Usuario, Administrador o SuperUsuario
+        if (auth()->user()->rol === 'Usuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
+            try {
+                $validatedData = $request->validated();
+                $incubationData = IncubationData::findOrFail($id);
+                $incubationData->update($validatedData);
+            } catch (\Exception $e) {
+                // Enviar el error directamente a la vista usando withErrors
+                return redirect()->back()->withErrors('Error al actualizar la incubación: ' . $e->getMessage())->withInput();
+            }
 
-     public function update(IncubationDataRequest $request, $id)
-     {
-         try {
-             $validatedData = $request->validated();
-             $incubationData = IncubationData::findOrFail($id);
-             $incubationData->update($validatedData);
-         } catch (\Exception $e) {
-             // Enviar el error directamente a la vista usando withErrors
-             return redirect()->back()->withErrors('Error al actualizar la incubación: ' . $e->getMessage())->withInput();
-         }
-     
-         return redirect()->route('incubation.index')->with('success', 'Datos de incubación actualizados correctamente.');
-     }
-     
+            return redirect()->route('incubation.index')->with('success', 'Datos de incubación actualizados correctamente.');
+        }
 
-    
+        abort(403, 'Acción no autorizada.');
+    }
+
     /**
      * Elimina los datos de incubación especificados del almacenamiento.
      *
@@ -119,25 +151,29 @@ class IncubationDataController extends Controller
      */
     public function destroy(IncubationData $incubationData)
     {
-        try {
-            $incubationData->delete();
-            return redirect()->route('incubation.index')->with('success', 'Incubación eliminada correctamente.');
-        } catch (\Exception $e) {
-            return back()->with('error', 'No se pudo eliminar la incubación.');
+        // Verificar si el usuario tiene el rol de Usuario, Administrador o SuperUsuario
+        if (auth()->user()->rol === 'Usuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
+            try {
+                $incubationData->delete();
+                return redirect()->route('incubation.index')->with('success', 'Incubación eliminada correctamente.');
+            } catch (\Exception $e) {
+                return back()->with('error', 'No se pudo eliminar la incubación.');
+            }
         }
+
+        abort(403, 'Acción no autorizada.');
     }
 
-    // IncubacionController.php
     public function imprimir($id)
     {
-        $incubationData = IncubationData::with('cliente')->findOrFail($id); 
-        $configuracion = Configuracion::first(); // Asume que solo hay una configuración o obtén la configuración relevante
-    
-        return view('incubation.imprimir', compact('incubationData', 'configuracion'));
-    }
-    
-    
-    
+        // Verificar si el usuario tiene el rol de Usuario, Administrador o SuperUsuario
+        if (auth()->user()->rol === 'Usuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
+            $incubationData = IncubationData::with('cliente')->findOrFail($id);
+            $configuracion = Configuracion::first();
 
-    
+            return view('incubation.imprimir', compact('incubationData', 'configuracion'));
+        }
+
+        abort(403, 'Acción no autorizada.');
+    }
 }
