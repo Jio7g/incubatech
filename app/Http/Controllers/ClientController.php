@@ -5,81 +5,77 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\ClientRequest;
 
 class ClientController extends Controller
 {
     public function index()
     {
-        $clients = Client::all();
-        return view('clients.index', compact('clients'));
+        // Verificar si el usuario tiene el rol de Usuario, Administrador o SuperUsuario
+        if (auth()->user()->rol === 'Usuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
+            $clients = Client::all();
+            return view('clients.index', compact('clients'));
+        }
+
+        abort(403, 'Acción no autorizada.');
     }
 
     public function create()
     {
-        // Asumiendo que quieres relacionar clientes con usuarios
-        $users = User::all();
-        return view('clients.create', compact('users'));
+        // Verificar si el usuario tiene el rol de Usuario, Administrador o SuperUsuario
+        if (auth()->user()->rol === 'Usuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
+            $users = User::all();
+            return view('clients.create', compact('users'));
+        }
+
+        abort(403, 'Acción no autorizada.');
     }
 
-    public function store(Request $request)
+    public function store(ClientRequest $request)
     {
-        $data = $request->validate([
-            'nombre' => 'required|max:255',
-            'direccion' => 'required|max:255',
-            'telefono' => 'required|max:255',
-            'correo' => 'required|email|max:255|unique:clientes',
-        ]);
-    
-        // Asignar el usuario autenticado al cliente
-        $data['usuario_id'] = auth()->id(); // Obtiene el ID del usuario autenticado
-    
-        Client::create($data);
-    
-        return redirect()->route('clients.index')->with('success', 'Cliente creado con éxito.');
-    }
-    
-    public function edit($id) // Utiliza parámetro $id para una mayor claridad en la demostración
-    {
-        $client = Client::findOrFail($id); // Asegúrate de manejar la excepción si no se encuentra el cliente
-        if (auth()->user()->rol !== 'SuperUsuario') {
-            abort(403, 'Acción no autorizada.');
+        // Verificar si el usuario tiene el rol de Usuario, Administrador o SuperUsuario
+        if (auth()->user()->rol === 'Usuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
+            $data = $request->validated();
+            $data['usuario_id'] = auth()->id();
+            Client::create($data);
+            return redirect()->route('clients.index')->with('success', 'Cliente creado con éxito.');
         }
-    
-        return view('clients.edit', compact('client'));
+
+        abort(403, 'Acción no autorizada.');
     }
-    
-    public function update(Request $request, $id) // Utiliza parámetro $id
+
+    public function edit($id)
     {
-        $client = Client::findOrFail($id); // Encuentra el cliente o falla
-        if (auth()->user()->rol !== 'SuperUsuario') {
-            abort(403, 'Acción no autorizada.');
+        // Verificar si el usuario tiene el rol de Administrador o SuperUsuario
+        if (auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
+            $client = Client::findOrFail($id);
+            return view('clients.edit', compact('client'));
         }
-    
-        $data = $request->validate([
-            'nombre' => 'required|max:255',
-            'direccion' => 'required|max:255',
-            'telefono' => 'required|max:255',
-            'correo' => 'required|email|max:255|unique:clientes,correo,' . $client->id,
-        ]);
-    
-        $client->update($data);
-    
-        return redirect()->route('clients.index')->with('success', 'Cliente actualizado con éxito.');
+
+        abort(403, 'Acción no autorizada.');
     }
-    
-    
-    
+
+    public function update(ClientRequest $request, $id)
+    {
+        // Verificar si el usuario tiene el rol de Administrador o SuperUsuario
+        if (auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
+            $client = Client::findOrFail($id);
+            $data = $request->validated();
+            $client->update($data);
+            return redirect()->route('clients.index')->with('success', 'Cliente actualizado con éxito.');
+        }
+
+        abort(403, 'Acción no autorizada.');
+    }
+
     public function destroy(Client $client)
     {
-        // Verificar si el usuario actual tiene el rol de SuperUsuario
-        if (auth()->user()->rol !== 'SuperUsuario') {
-            abort(403, 'Acción no autorizada.');
+        // Verificar si el usuario tiene el rol de SuperUsuario
+        if (auth()->user()->rol === 'SuperUsuario') {
+            $client->delete();
+            return redirect()->route('clients.index')->with('success', 'Cliente eliminado con éxito.');
         }
-    
-        $client->delete();
-    
-        return redirect()->route('clients.index')->with('success', 'Cliente eliminado con éxito.');
+
+        abort(403, 'Acción no autorizada.');
     }
-    
-    
 }

@@ -14,7 +14,7 @@ class Client extends Model
      * @var array
      */
     protected $fillable = [
-        'usuario_id', 'nombre', 'direccion', 'telefono', 'correo',
+        'usuario_id', 'codigo', 'nombre', 'direccion', 'telefono', 'correo',
     ];
 
     /**
@@ -34,6 +34,8 @@ class Client extends Model
      */
     public function datosIncubacion()
     {
-        return $this->hasMany(IncubationData::class);
+        return $this->hasMany(IncubationData::class, 'cliente_id');  // `id` es la columna por defecto para la clave primaria
     }
+    
+    
 }
