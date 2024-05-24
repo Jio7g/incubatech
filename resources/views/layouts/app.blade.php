@@ -30,19 +30,30 @@
             </div>
             <!-- Enlaces del menú -->
             <nav class="mt-8 px-6 space-y-3">
+                <!-- Inicio -->
                 <a href="{{ route('home') }}" class="flex items-center px-4 py-3 text-lg text-white rounded-md hover:bg-gray-700 transition duration-300">
                     <i class="fas fa-home mr-2"></i>
                     <span>Inicio</span>
                 </a>
+
+                <!-- Usuarios (solo para SuperUsuario y Administrador) -->
+                @if (auth()->user()->rol === 'SuperUsuario' || auth()->user()->rol === 'Administrador')
                 <a href="{{ route('users.index') }}" class="flex items-center px-4 py-3 text-lg text-white rounded-md hover:bg-gray-700 transition duration-300">
                     <i class="fas fa-users mr-2"></i>
                     <span>Usuarios</span>
                 </a>
+                @endif
+
+                <!-- Clientes -->
+                @if (auth()->user()->rol === 'SuperUsuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'Usuario')
                 <a href="{{ route('clients.index') }}" class="flex items-center px-4 py-3 text-lg text-white rounded-md hover:bg-gray-700 transition duration-300">
                     <i class="fas fa-address-book mr-2"></i>
                     <span>Clientes</span>
                 </a>
+                @endif
+
                 <!-- Menú desplegable para gestionar incubaciones -->
+                @if (auth()->user()->rol === 'SuperUsuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'Usuario')
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="flex items-center justify-between w-full px-4 py-3 text-lg text-white rounded-md hover:bg-gray-700 focus:outline-none transition duration-300">
                         <div class="flex items-center">
@@ -62,19 +73,33 @@
                         </a>
                     </div>
                 </div>
+                @endif
+
+                <!-- Incubaciones Activas -->
+                @if (auth()->user()->rol === 'SuperUsuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'Usuario')
                 <a href="{{ route('incubations_clients.index') }}" class="flex items-center px-4 py-3 text-lg text-white rounded-md hover:bg-gray-700 transition duration-300">
                     <i class="fas fa-vote-yea mr-2"></i>
                     <span>Incubaciones Activas</span>
                 </a>
+                @endif
+
+                <!-- Historial -->
+                @if (auth()->user()->rol === 'SuperUsuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'Usuario')
                 <a href="{{ url('/historial') }}" class="flex items-center px-4 py-3 text-lg text-white rounded-md hover:bg-gray-700 transition duration-300">
                     <i class="fas fa-history mr-2"></i>
                     <span>Historial</span>
                 </a>
+                @endif
+
+                <!-- Configuración (solo para SuperUsuario) -->
+                @if (auth()->user()->rol === 'SuperUsuario')
                 <a href="{{ route('configuracion.index') }}" class="flex items-center px-4 py-3 text-lg text-white rounded-md hover:bg-gray-700 transition duration-300">
                     <i class="fas fa-tools mr-2"></i>
-                    <span>Configuracion</span>
+                    <span>Configuración</span>
                 </a>
-                <!-- Enlace para cerrar sesión -->
+                @endif
+
+                <!-- Cerrar Sesión -->
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="flex items-center px-4 py-3 text-lg text-white rounded-md hover:bg-gray-700 transition duration-300">
                     <i class="fas fa-sign-out-alt mr-2"></i>
                     <span>Cerrar Sesión</span>
