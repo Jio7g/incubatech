@@ -2,55 +2,57 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
-    <div class="flex flex-col md:flex-row justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold mb-4 md:mb-0">Clientes con Datos de Incubación</h1>
-        <div class="flex items-center">
-            <a href="{{ route('incubation.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-4">
-                Agregar Nuevo
-            </a>
-            <div class="relative">
-                <input type="text" id="search" class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Buscar cliente...">
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3">
-                    <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
+    <div class="max-w-9xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-gray-800 to-blue-900 px-6 py-4 flex items-center justify-between">
+            <h1 class="text-2xl font-bold text-white">Clientes con Datos de Incubación</h1>
+            <div class="flex items-center">
+                <a href="{{ route('incubation.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-4">
+                    Agregar Nuevo
+                </a>
+                <div class="relative">
+                    <input type="text" id="search" class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Buscar cliente...">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- muestra la tabla de clientes con incubaciones -->
-    <div class="bg-white shadow-md rounded-lg">
-        <ul class="divide-y divide-gray-200">
-            @foreach ($clientsWithIncubation as $client)
-            <li class="px-6 py-4">
-                <div class="flex flex-col md:flex-row items-center">
-                    <div class="flex-shrink-0">
-                        <i class="fas fa-user-circle fa-3x text-gray-400"></i>
-                    </div>
-                    <div class="ml-4 md:ml-6">
-                        <div class="text-sm font-medium text-gray-900">{{ $client->nombre }}</div>
-                        <div class="text-sm text-gray-500">{{ $client->direccion }}</div>
-                    </div>
-                    <div class="mt-4 md:mt-0 md:ml-auto">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                            <a href="{{ route('incubations.show', $client->id) }}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded text-center">
-                                Ver Incubaciones
-                            </a>
-                            <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-center" onclick="openConfirmationModal({{ $client->id }}, '{{ $client->nombre }}', '{{ $client->correo }}')">
-                                Compartir
-                            </button>
+        <div class="p-6">
+            <div class="bg-white shadow-md rounded-lg">
+                <ul class="divide-y divide-gray-200">
+                    @foreach ($clientsWithIncubation as $client)
+                    <li class="px-6 py-4">
+                        <div class="flex flex-col md:flex-row items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-user-circle fa-3x text-gray-400"></i>
+                            </div>
+                            <div class="ml-4 md:ml-6">
+                                <div class="text-sm font-medium text-gray-900">{{ $client->nombre }}</div>
+                                <div class="text-sm text-gray-500">{{ $client->direccion }}</div>
+                            </div>
+                            <div class="mt-4 md:mt-0 md:ml-auto">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    <a href="{{ route('incubations.show', $client->id) }}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded text-center">
+                                        Ver Incubaciones
+                                    </a>
+                                    <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-center" onclick="openConfirmationModal({{ $client->id }}, '{{ $client->nombre }}', '{{ $client->correo }}')">
+                                        Compartir
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </li>
-            @endforeach
-        </ul>
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 
 <!-- Modal de confirmación -->
-<div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true" id="confirmationModal" style="display: none;">
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true" id="confirmationModal">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
@@ -85,7 +87,7 @@
 </div>
 
 <!-- Modal de enlace generado -->
-<div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true" id="linkModal" style="display: none;">
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true" id="linkModal">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
@@ -132,11 +134,11 @@
     function openConfirmationModal(clientId, clientName, clientEmail) {
         selectedClientId = clientId;
         document.getElementById('confirmationMessage').textContent = `¿Desea compartir el proceso de incubación? Se enviará la información a ${clientName} (${clientEmail}).`;
-        document.getElementById('confirmationModal').style.display = 'block';
+        document.getElementById('confirmationModal').classList.remove('hidden');
     }
 
     function closeConfirmationModal() {
-        document.getElementById('confirmationModal').style.display = 'none';
+        document.getElementById('confirmationModal').classList.add('hidden');
     }
 
     function confirmShare() {
@@ -145,8 +147,8 @@
             .then(response => response.json())
             .then(data => {
                 document.getElementById('generatedLink').value = data.shareUrl;
-                document.getElementById('confirmationModal').style.display = 'none';
-                document.getElementById('linkModal').style.display = 'block';
+                document.getElementById('confirmationModal').classList.add('hidden');
+                document.getElementById('linkModal').classList.remove('hidden');
             })
             .catch(error => {
                 console.error('Error al compartir:', error);
@@ -154,7 +156,7 @@
     }
 
     function closeLinkModal() {
-        document.getElementById('linkModal').style.display = 'none';
+        document.getElementById('linkModal').classList.add('hidden');
     }
 
     function copyLink() {
