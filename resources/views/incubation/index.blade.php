@@ -59,37 +59,64 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200" id="incubationTableBody">
-                            @foreach ($data as $item)
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $item->id }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $item->fecha_recepcion }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $item->cliente->codigo }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $item->cliente->nombre }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-center">
-                                    <div class="flex justify-center space-x-4">
-                                        <a href="{{ route('incubation.show', $item->id) }}" class="text-blue-500 hover:text-blue-600 font-medium">
-                                            Ver Detalles
-                                        </a>
-                                        <a href="{{ route('incubation.edit', $item) }}" class="text-yellow-500 hover:text-yellow-600 font-medium">
-                                            Editar
-                                        </a>
-                                        <form action="{{ route('incubation.destroy', $item) }}" method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-500 hover:text-red-600 font-medium" onclick="return confirm('¿Estás seguro de querer eliminar este registro?')">
-                                                Eliminar
-                                            </button>
-                                        </form>
-                                        <a href="{{ route('incubation.imprimir', $item->id) }}" target="_blank" class="text-green-500 hover:text-green-600 font-medium">
-                                            Imprimir
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
+                            <!-- Aquí se cargarán dinámicamente los datos de incubación -->
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <div class="mt-8 flex justify-center items-center">
+                <nav class="inline-flex rounded-md shadow-sm" aria-label="Pagination">
+                    <a href="#" id="prev-page" class="pagination-link py-2 px-4 rounded-l-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
+                        <span class="sr-only">Anterior</span>
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                    <span id="page-numbers" class="pagination-link py-2 px-4 border-t border-b border-gray-300 bg-white text-gray-700"></span>
+                    <a href="#" id="next-page" class="pagination-link py-2 px-4 rounded-r-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
+                        <span class="sr-only">Siguiente</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación de eliminación -->
+<div id="deleteModal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                    <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                        <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                            Eliminar Registro de Incubación
+                        </h3>
+                        <div class="mt-2">
+                            <p class="text-sm text-gray-500">
+                                ¿Estás seguro de que quieres eliminar este registro de incubación? Esta acción no se puede deshacer.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <form id="deleteForm" action="" method="POST" class="inline-block">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" id="confirmDelete" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        Eliminar
+                    </button>
+                </form>
+                <button type="button" id="cancelDelete" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                    Cancelar
+                </button>
             </div>
         </div>
     </div>
@@ -98,72 +125,170 @@
 
 @section('scripts')
 <script>
+    const incubationTableBody = document.querySelector('#incubationTableBody');
+    const pageNumbers = document.querySelector('#page-numbers');
+    const prevPageLink = document.querySelector('#prev-page');
+    const nextPageLink = document.querySelector('#next-page');
+    const itemsPerPage = 10;
+    let currentPage = 1;
+    let incubationData = @json($data);
+
+    // Función para mostrar los datos de incubación en la página actual
+    function displayIncubationData() {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const incubationDataToDisplay = incubationData.slice(startIndex, endIndex);
+
+        incubationTableBody.innerHTML = '';
+
+        incubationDataToDisplay.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap">${item.id}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${item.fecha_recepcion}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${item.cliente.codigo}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${item.cliente.nombre}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                    <div class="flex justify-center space-x-4">
+                        <a href="/incubation/${item.id}" class="text-blue-500 hover:text-blue-600 font-medium">
+                            Ver Detalles
+                        </a>
+                        <a href="/incubation/${item.id}/edit" class="text-yellow-500 hover:text-yellow-600 font-medium">
+                            Editar
+                        </a>
+                        <button type="button" class="delete-incubation-btn text-red-500 hover:text-red-600 font-medium" data-incubation-id="${item.id}">
+                            Eliminar
+                        </button>
+                        <a href="/incubation/${item.id}/imprimir" target="_blank" class="text-green-500 hover:text-green-600 font-medium">
+                            Imprimir
+                        </a>
+                    </div>
+                </td>
+            `;
+            incubationTableBody.appendChild(row);
+        });
+    }
+
+    // Función para actualizar los números de página
+    function updatePageNumbers() {
+        const totalPages = Math.ceil(incubationData.length / itemsPerPage);
+        pageNumbers.textContent = `${currentPage} de ${totalPages}`;
+
+        if (currentPage === 1) {
+            prevPageLink.classList.add('opacity-50', 'cursor-not-allowed');
+            prevPageLink.removeEventListener('click', goToPreviousPage);
+        } else {
+            prevPageLink.classList.remove('opacity-50', 'cursor-not-allowed');
+            prevPageLink.addEventListener('click', goToPreviousPage);
+        }
+
+        if (currentPage === totalPages) {
+            nextPageLink.classList.add('opacity-50', 'cursor-not-allowed');
+            nextPageLink.removeEventListener('click', goToNextPage);
+        } else {
+            nextPageLink.classList.remove('opacity-50', 'cursor-not-allowed');
+            nextPageLink.addEventListener('click', goToNextPage);
+        }
+    }
+
+    // Función para ir a la página anterior
+    function goToPreviousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            displayIncubationData();
+            updatePageNumbers();
+        }
+    }
+
+    // Función para ir a la página siguiente
+    function goToNextPage() {
+        const totalPages = Math.ceil(incubationData.length / itemsPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            displayIncubationData();
+            updatePageNumbers();
+        }
+    }
+
     // Función para ordenar la tabla por ID
     function sortTable(columnIndex) {
-        const table = document.querySelector('table');
-        const tbody = table.querySelector('#incubationTableBody');
-        const rows = Array.from(tbody.querySelectorAll('tr'));
-
-        const sortedRows = rows.sort((a, b) => {
-            const aValue = a.cells[columnIndex].textContent.trim();
-            const bValue = b.cells[columnIndex].textContent.trim();
-
-            if (columnIndex === 0) {
-                // Si es la columna de ID, convertir los valores a números antes de comparar
-                return Number(aValue) - Number(bValue);
-            } else {
-                // Para las demás columnas, usar la comparación de cadenas
-                return aValue.localeCompare(bValue, undefined, { numeric: true });
-            }
+        incubationData.sort((a, b) => {
+            const aValue = a.id;
+            const bValue = b.id;
+            return aValue - bValue;
         });
 
-        tbody.innerHTML = '';
-        sortedRows.forEach(row => tbody.appendChild(row));
+        currentPage = 1;
+        displayIncubationData();
+        updatePageNumbers();
     }
 
     // Función para buscar datos de incubación
     function searchIncubation() {
         const searchInput = document.querySelector('#search');
         const searchTerm = searchInput.value.toLowerCase();
-        const rows = document.querySelectorAll('#incubationTableBody tr');
 
-        rows.forEach(row => {
-            const id = row.cells[0].textContent.toLowerCase();
-            const fechaRecepcion = row.cells[1].textContent.toLowerCase();
-            const clienteId = row.cells[2].textContent.toLowerCase();
-            const clienteCodigo = row.cells[3].textContent.toLowerCase();
-            const clienteNombre = row.cells[4].textContent.toLowerCase();
+        incubationData = @json($data).filter(item => {
+            const id = item.id.toString().toLowerCase();
+            const fechaRecepcion = item.fecha_recepcion.toLowerCase();
+            const clienteId = item.cliente.codigo.toLowerCase();
+            const clienteCodigo = item.cliente.codigo.toLowerCase();
+            const clienteNombre = item.cliente.nombre.toLowerCase();
 
-            if (id.includes(searchTerm) || fechaRecepcion.includes(searchTerm) || clienteId.includes(searchTerm) || clienteCodigo.includes(searchTerm) || clienteNombre.includes(searchTerm)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
+            return id.includes(searchTerm) || fechaRecepcion.includes(searchTerm) || clienteId.includes(searchTerm) || clienteCodigo.includes(searchTerm) || clienteNombre.includes(searchTerm);
         });
+
+        currentPage = 1;
+        displayIncubationData();
+        updatePageNumbers();
     }
 
     function filtrarPorFechas() {
         const fechaInicio = document.getElementById('fecha_inicio').value;
         const fechaFin = document.getElementById('fecha_fin').value;
-        const rows = document.querySelectorAll('#incubationTableBody tr');
-
-        rows.forEach(row => {
-            const fechaRecepcion = row.cells[1].textContent;
-            if (fechaRecepcion >= fechaInicio && fechaRecepcion <= fechaFin) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    }
-
-    // Evento de búsqueda al presionar una tecla
-    document.querySelector('#search').addEventListener('keyup', searchIncubation);
-
-    // Evento de filtro por fechas al enviar el formulario
-    document.querySelector('form').addEventListener('submit', function(event) {
-        event.preventDefault(); // Evitar el envío del formulario
-        filtrarPorFechas();
+        incubationData = @json($data).filter(item => {
+        const fechaRecepcion = item.fecha_recepcion;
+        return fechaRecepcion >= fechaInicio && fechaRecepcion <= fechaFin;
     });
+
+    currentPage = 1;
+    displayIncubationData();
+    updatePageNumbers();
+}
+
+// Evento de búsqueda al presionar una tecla
+document.querySelector('#search').addEventListener('keyup', searchIncubation);
+
+// Evento de filtro por fechas al enviar el formulario
+document.querySelector('form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Evitar el envío del formulario
+    filtrarPorFechas();
+});
+
+// Funcionalidad del modal de confirmación de eliminación
+const deleteModal = document.querySelector('#deleteModal');
+const deleteForm = document.querySelector('#deleteForm');
+const confirmDeleteButton = document.querySelector('#confirmDelete');
+const cancelDeleteButton = document.querySelector('#cancelDelete');
+let incubationIdToDelete = null;
+
+// Abrir el modal al hacer clic en el botón "Eliminar"
+incubationTableBody.addEventListener('click', (e) => {
+    if (e.target.classList.contains('delete-incubation-btn')) {
+        incubationIdToDelete = e.target.dataset.incubationId;
+        deleteForm.action = `{{ route('incubation.destroy', ':id') }}`.replace(':id', incubationIdToDelete);
+        deleteModal.classList.remove('hidden');
+    }
+});
+
+// Cerrar el modal al hacer clic en el botón "Cancelar"
+cancelDeleteButton.addEventListener('click', () => {
+    deleteModal.classList.add('hidden');
+    incubationIdToDelete = null;
+});
+
+// Cargar los datos de incubación y actualizar los números de página al cargar la página
+displayIncubationData();
+updatePageNumbers();
 </script>
 @endsection

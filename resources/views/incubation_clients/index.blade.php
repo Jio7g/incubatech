@@ -21,31 +21,22 @@
         </div>
         <div class="p-6">
             <div class="bg-white shadow-md rounded-lg">
-                <ul class="divide-y divide-gray-200">
-                    @foreach ($clientsWithIncubation as $client)
-                    <li class="px-6 py-4">
-                        <div class="flex flex-col md:flex-row items-center">
-                            <div class="flex-shrink-0">
-                                <i class="fas fa-user-circle fa-3x text-gray-400"></i>
-                            </div>
-                            <div class="ml-4 md:ml-6">
-                                <div class="text-sm font-medium text-gray-900">{{ $client->nombre }}</div>
-                                <div class="text-sm text-gray-500">{{ $client->direccion }}</div>
-                            </div>
-                            <div class="mt-4 md:mt-0 md:ml-auto">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                    <a href="{{ route('incubations.show', $client->id) }}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded text-center">
-                                        Ver Incubaciones
-                                    </a>
-                                    <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-center" onclick="openConfirmationModal({{ $client->id }}, '{{ $client->nombre }}', '{{ $client->correo }}')">
-                                        Compartir
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    @endforeach
+                <ul class="divide-y divide-gray-200" id="clientList">
+                    <!-- Aquí se cargarán dinámicamente los clientes -->
                 </ul>
+            </div>
+            <div class="mt-8 flex justify-center items-center">
+                <nav class="inline-flex rounded-md shadow-sm" aria-label="Pagination">
+                    <a href="#" id="prev-page" class="pagination-link py-2 px-4 rounded-l-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
+                        <span class="sr-only">Anterior</span>
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                    <span id="page-numbers" class="pagination-link py-2 px-4 border-t border-b border-gray-300 bg-white text-gray-700"></span>
+                    <a href="#" id="next-page" class="pagination-link py-2 px-4 rounded-r-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
+                        <span class="sr-only">Siguiente</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </nav>
             </div>
         </div>
     </div>
@@ -166,25 +157,112 @@
         alert('Enlace copiado al portapapeles');
     }
 
+    const clientList = document.querySelector('#clientList');
+    const pageNumbers = document.querySelector('#page-numbers');
+    const prevPageLink = document.querySelector('#prev-page');
+    const nextPageLink = document.querySelector('#next-page');
+    const itemsPerPage = 10;
+    let currentPage = 1;
+    let clientsData = @json($clientsWithIncubation);
+
+    // Función para mostrar los clientes en la página actual
+    function displayClients() {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const clientsToDisplay = clientsData.slice(startIndex, endIndex);
+
+        clientList.innerHTML = '';
+
+        clientsToDisplay.forEach(client => {
+            const listItem = document.createElement('li');
+            listItem.className = 'px-6 py-4';
+            listItem.innerHTML = `
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-user-circle fa-3x text-gray-400"></i>
+                    </div>
+                    <div class="ml-4 md:ml-6">
+                        <div class="text-sm font-medium text-gray-900">${client.nombre}</div>
+                        <div class="text-sm text-gray-500">${client.direccion}</div>
+                    </div>
+                    <div class="mt-4 md:mt-0 md:ml-auto">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <a href="/incubations/${client.id}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded text-center">
+                                Ver Incubaciones
+                            </a>
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-center" onclick="openConfirmationModal(${client.id}, '${client.nombre}', '${client.correo}')">
+                                Compartir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            clientList.appendChild(listItem);
+        });
+    }
+
+    // Función para actualizar los números de página
+    function updatePageNumbers() {
+        const totalPages = Math.ceil(clientsData.length / itemsPerPage);
+        pageNumbers.textContent = `${currentPage} de ${totalPages}`;
+
+        if (currentPage === 1) {
+            prevPageLink.classList.add('opacity-50', 'cursor-not-allowed');
+            prevPageLink.removeEventListener('click', goToPreviousPage);
+        } else {
+            prevPageLink.classList.remove('opacity-50', 'cursor-not-allowed');
+            prevPageLink.addEventListener('click', goToPreviousPage);
+        }
+
+        if (currentPage === totalPages) {
+            nextPageLink.classList.add('opacity-50', 'cursor-not-allowed');
+            nextPageLink.removeEventListener('click', goToNextPage);
+        } else {
+            nextPageLink.classList.remove('opacity-50', 'cursor-not-allowed');
+            nextPageLink.addEventListener('click', goToNextPage);
+        }
+    }
+
+    // Función para ir a la página anterior
+    function goToPreviousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            displayClients();
+            updatePageNumbers();
+        }
+    }
+
+    // Función para ir a la página siguiente
+    function goToNextPage() {
+        const totalPages = Math.ceil(clientsData.length / itemsPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            displayClients();
+            updatePageNumbers();
+        }
+    }
     // Función para buscar clientes
     function searchClients() {
         const searchInput = document.querySelector('#search');
         const searchTerm = searchInput.value.toLowerCase();
-        const listItems = document.querySelectorAll('.divide-y > li');
 
-        listItems.forEach(item => {
-            const clientName = item.querySelector('.text-sm.font-medium').textContent.toLowerCase();
-            const clientAddress = item.querySelector('.text-sm.text-gray-500').textContent.toLowerCase();
+        clientsData = @json($clientsWithIncubation).filter(client => {
+            const clientName = client.nombre.toLowerCase();
+            const clientAddress = client.direccion.toLowerCase();
 
-            if (clientName.includes(searchTerm) || clientAddress.includes(searchTerm)) {
-                item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
-            }
+            return clientName.includes(searchTerm) || clientAddress.includes(searchTerm);
         });
+
+        currentPage = 1;
+        displayClients();
+        updatePageNumbers();
     }
 
     // Evento de búsqueda al presionar una tecla
     document.querySelector('#search').addEventListener('keyup', searchClients);
+
+    // Cargar los clientes y actualizar los números de página al cargar la página
+    displayClients();
+    updatePageNumbers();
 </script>
 @endsection
