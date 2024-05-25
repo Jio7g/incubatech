@@ -52,7 +52,11 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm()
     {
-        return view('auth.register');
+                // Verificar si el usuario actual tiene el rol de SuperUsuario o Administrador
+        if (auth()->user()->rol === 'SuperUsuario' || auth()->user()->rol === 'Administrador') {
+            return view('auth.register');
+       }
+
     }
 
     /**
@@ -65,10 +69,10 @@ class RegisterController extends Controller
     {
         // Validar los datos del formulario
         $validatedData = $request->validated();
-    
+
         // Crear el usuario
         User::create($validatedData);
-    
+
         // Redireccionar o mostrar un mensaje de éxito
         return redirect()->route('login')->with('success', 'Registro exitoso. Por favor, inicia sesión.');
     }

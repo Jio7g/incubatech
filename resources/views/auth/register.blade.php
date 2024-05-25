@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<!-- Usuarios (solo para SuperUsuario y Administrador) -->
+@if (auth()->user()->rol === 'SuperUsuario' || auth()->user()->rol === 'Administrador')
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
         <div class="bg-gradient-to-r from-gray-800 to-blue-900 px-6 py-4">
@@ -66,4 +68,5 @@
         </div>
     </div>
 </div>
+@endif
 @endsection

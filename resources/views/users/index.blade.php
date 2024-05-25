@@ -19,7 +19,27 @@
         </div>
       </div>
       <div id="userGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        <!-- Aquí se cargarán dinámicamente los usuarios -->
+        @forelse ($users as $user)
+          <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <div class="bg-gradient-to-r from-gray-800 to-blue-900 text-white py-4 px-6">
+              <h2 class="text-xl font-bold">{{ $user->nombre }}</h2>
+            </div>
+            <div class="p-4">
+              <p class="text-gray-600 mb-2">{{ $user->correo }}</p>
+              <p class="text-gray-600 mb-4">{{ $user->rol }}</p>
+              <div class="flex justify-end">
+                <a href="{{ route('users.edit', $user->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
+                  Editar
+                </a>
+                <button type="button" class="delete-user-btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" data-user-id="{{ $user->id }}">
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          </div>
+        @empty
+          <p>No hay usuarios para mostrar</p>
+        @endforelse
       </div>
       <div class="mt-8 flex justify-center items-center">
         <nav class="inline-flex rounded-md shadow-sm" aria-label="Pagination">
@@ -82,13 +102,13 @@
 
 @section('scripts')
 <script>
+  let users = @json($users);
   const userGrid = document.querySelector('#userGrid');
   const pageNumbers = document.querySelector('#page-numbers');
   const prevPageLink = document.querySelector('#prev-page');
   const nextPageLink = document.querySelector('#next-page');
   const usersPerPage = 8;
   let currentPage = 1;
-  let users = @json($users);
 
   // Función para mostrar los usuarios en la página actual
   function displayUsers() {
@@ -108,7 +128,7 @@
             <p class="text-gray-600 mb-2">${user.correo}</p>
             <p class="text-gray-600 mb-4">${user.rol}</p>
             <div class="flex justify-end">
-              <a href="/users/${user.id}/edit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
+              <a href="{{ route('users.edit', $user->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
                 Editar
               </a>
               <button type="button" class="delete-user-btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" data-user-id="${user.id}">

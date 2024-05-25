@@ -45,20 +45,20 @@
                                 Recuérdame
                             </label>
                         </div>
-                        <div class="text-sm">
+                        {{-- <div class="text-sm">
                             <a href="{{ route('password.request') }}" class="font-medium text-blue-500 hover:text-blue-600">
                                 ¿Olvidaste la contraseña?
                             </a>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="mb-6">
                         <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             Iniciar sesión
                         </button>
                     </div>
-                    <div class="text-center">
+                    {{-- <div class="text-center">
                         <p class="text-sm text-gray-600">¿No tienes una cuenta? <a href="{{ route('register') }}" class="font-medium text-blue-500 hover:text-blue-600">Regístrate</a></p>
-                    </div>
+                    </div> --}}
                 </form>
             </div>
         </div>
