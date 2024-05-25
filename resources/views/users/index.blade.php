@@ -99,136 +99,95 @@
   </div>
 </div>
 @endsection
-
 @section('scripts')
 <script>
-  let users = @json($users);
-  const userGrid = document.querySelector('#userGrid');
-  const pageNumbers = document.querySelector('#page-numbers');
-  const prevPageLink = document.querySelector('#prev-page');
-  const nextPageLink = document.querySelector('#next-page');
-  const usersPerPage = 8;
-  let currentPage = 1;
+    // Lista original de usuarios (no se modifica)
+    const allUsers = @json($users);
+    let users = allUsers.slice(); // Copia de usuarios para manipulación
 
-  // Función para mostrar los usuarios en la página actual
-  function displayUsers() {
-    const startIndex = (currentPage - 1) * usersPerPage;
-    const endIndex = startIndex + usersPerPage;
-    const usersToDisplay = users.slice(startIndex, endIndex);
+    const userGrid = document.querySelector('#userGrid');
+    const pageNumbers = document.querySelector('#page-numbers');
+    const prevPageLink = document.querySelector('#prev-page');
+    const nextPageLink = document.querySelector('#next-page');
+    const usersPerPage = 8;
+    let currentPage = 1;
 
-    userGrid.innerHTML = '';
+    // Definición de rutas para uso en JavaScript
+    const routes = {
+        edit: id => `{{ url('usuarios/${id}/editar') }}`,
+        destroy: id => `{{ url('usuarios/${id}') }}`
+    };
 
-    usersToDisplay.forEach(user => {
-      const userCard = `
-        <div class="bg-white shadow-md rounded-lg overflow-hidden">
-          <div class="bg-gradient-to-r from-gray-800 to-blue-900 text-white py-4 px-6">
-            <h2 class="text-xl font-bold">${user.nombre}</h2>
-          </div>
-          <div class="p-4">
-            <p class="text-gray-600 mb-2">${user.correo}</p>
-            <p class="text-gray-600 mb-4">${user.rol}</p>
-            <div class="flex justify-end">
-              <a href="{{ route('users.edit', $user->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
-                Editar
-              </a>
-              <button type="button" class="delete-user-btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" data-user-id="${user.id}">
-                Eliminar
-              </button>
-            </div>
-          </div>
-        </div>
-      `;
+    function displayUsers() {
+        const startIndex = (currentPage - 1) * usersPerPage;
+        const endIndex = startIndex + usersPerPage;
+        const usersToDisplay = users.slice(startIndex, endIndex);
 
-      userGrid.innerHTML += userCard;
-    });
-  }
-
-  // Función para actualizar los números de página
-  function updatePageNumbers() {
-    const totalPages = Math.ceil(users.length / usersPerPage);
-    pageNumbers.textContent = `${currentPage} de ${totalPages}`;
-
-    if (currentPage === 1) {
-      prevPageLink.classList.add('opacity-50', 'cursor-not-allowed');
-      prevPageLink.removeEventListener('click', goToPreviousPage);
-    } else {
-      prevPageLink.classList.remove('opacity-50', 'cursor-not-allowed');
-      prevPageLink.addEventListener('click', goToPreviousPage);
+        userGrid.innerHTML = '';
+        usersToDisplay.forEach(user => {
+            const userCard = `
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <div class="bg-gradient-to-r from-gray-800 to-blue-900 text-white py-4 px-6">
+                        <h2 class="text-xl font-bold">${user.nombre}</h2>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-gray-600 mb-2">${user.correo}</p>
+                        <p class="text-gray-600 mb-4">${user.rol}</p>
+                        <div class="flex justify-end">
+                            <a href="${routes.edit(user.id)}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
+                                Editar
+                            </a>
+                            <button type="button" class="delete-user-btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" data-user-id="${user.id}">
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            userGrid.innerHTML += userCard;
+        });
     }
 
-    if (currentPage === totalPages) {
-      nextPageLink.classList.add('opacity-50', 'cursor-not-allowed');
-      nextPageLink.removeEventListener('click', goToNextPage);
-    } else {
-      nextPageLink.classList.remove('opacity-50', 'cursor-not-allowed');
-      nextPageLink.addEventListener('click', goToNextPage);
+    // Paginación y funciones de navegación
+    function updatePageNumbers() {
+        const totalPages = Math.ceil(users.length / usersPerPage);
+        pageNumbers.textContent = `${currentPage} de ${totalPages}`;
+        prevPageLink.classList.toggle('opacity-50 cursor-not-allowed', currentPage === 1);
+        nextPageLink.classList.toggle('opacity-50 cursor-not-allowed', currentPage === totalPages);
+        prevPageLink.onclick = currentPage > 1 ? goToPreviousPage : null;
+        nextPageLink.onclick = currentPage < totalPages ? goToNextPage : null;
     }
-  }
 
-  // Función para ir a la página anterior
-  function goToPreviousPage() {
-    if (currentPage > 1) {
-      currentPage--;
-      displayUsers();
-      updatePageNumbers();
+    function goToPreviousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            displayUsers();
+            updatePageNumbers();
+        }
     }
-  }
 
-  // Función para ir a la página siguiente
-  function goToNextPage() {
-    const totalPages = Math.ceil(users.length / usersPerPage);
-    if (currentPage < totalPages) {
-      currentPage++;
-      displayUsers();
-      updatePageNumbers();
+    function goToNextPage() {
+        const totalPages = Math.ceil(users.length / usersPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            displayUsers();
+            updatePageNumbers();
+        }
     }
-  }
 
-  // Función para buscar usuarios
-  function searchUsers() {
-    const searchInput = document.querySelector('#search');
-    const searchTerm = searchInput.value.toLowerCase();
+    // Búsqueda de usuarios
+    function searchUsers() {
+        const searchInput = document.querySelector('#search');
+        const searchTerm = searchInput.value.toLowerCase();
+        users = allUsers.filter(user => user.nombre.toLowerCase().includes(searchTerm) || user.correo.toLowerCase().includes(searchTerm) || user.rol.toLowerCase().includes(searchTerm));
+        currentPage = 1;
+        displayUsers();
+        updatePageNumbers();
+    }
 
-    users = @json($users).filter(user => {
-      const name = user.nombre.toLowerCase();
-      const email = user.correo.toLowerCase();
-      const role = user.rol.toLowerCase();
+    document.querySelector('#search').addEventListener('keyup', searchUsers);
 
-      return name.includes(searchTerm) || email.includes(searchTerm) || role.includes(searchTerm);
-    });
-
-    currentPage = 1;
     displayUsers();
     updatePageNumbers();
-  }
-
-  // Evento de búsqueda al presionar una tecla
-  document.querySelector('#search').addEventListener('keyup', searchUsers);
-
-  // Funcionalidad del modal de confirmación de eliminación
-  const deleteModal = document.querySelector('#deleteModal');
-  const deleteForm = document.querySelector('#deleteForm');
-  const confirmDeleteButton = document.querySelector('#confirmDelete');
-  const cancelDeleteButton = document.querySelector('#cancelDelete');
-  let userIdToDelete = null;
-
-  // Abrir el modal al hacer clic en el botón "Eliminar"
-  userGrid.addEventListener('click', (e) => {
-    if (e.target.classList.contains('delete-user-btn')) {
-      userIdToDelete = e.target.dataset.userId;
-      deleteForm.action = `{{ route('users.destroy', ':id') }}`.replace(':id', userIdToDelete);
-      deleteModal.classList.remove('hidden');
-    }
-  });
-
-  // Cerrar el modal al hacer clic en el botón "Cancelar"
-  cancelDeleteButton.addEventListener('click', () => {
-    deleteModal.classList.add('hidden');
-    userIdToDelete = null;
-  });
-
-  // Cargar los usuarios y actualizar los números de página al cargar la página
-  displayUsers();
-  updatePageNumbers();
 </script>
 @endsection

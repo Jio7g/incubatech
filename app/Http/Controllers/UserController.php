@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+
 
 class UserController extends Controller
 {
@@ -44,6 +46,8 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+        Log::info("Editing user with ID: {$user->id}");
+
         // Verificar si el usuario actual tiene el rol de SuperUsuario o Administrador
         if (auth()->user()->rol === 'SuperUsuario' || auth()->user()->rol === 'Administrador') {
             return view('users.edit', compact('user'));
