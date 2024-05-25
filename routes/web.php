@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/usuarios/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::get('/usuarios/{user}/editar', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/usuarios/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::post('/usuarios/store', [UserController::class, 'store'])->name('users.store');
 
     Route::resource('clients', 'ClientController');
     Route::get('/clientes/crear', [ClientController::class, 'create'])->name('clients.create');

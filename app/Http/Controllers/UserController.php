@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -24,6 +25,22 @@ class UserController extends Controller
     }
 
     // ...
+    public function store(Request $request)
+    {
+    $validatedData = $request->validate([
+        'nombre' => 'required|string|max:255',
+        'correo' => 'required|string|email|max:255|unique:usuarios',
+        'password' => 'required|string|min:8|confirmed',
+        'rol' => 'required',
+    ]);
+
+    $validatedData['password'] = Hash::make($validatedData['password']);
+
+    $user = User::create($validatedData);
+
+    return redirect()->route('users.index')->with('success', 'Usuario creado con éxito.');
+    }
+
 
     public function edit(User $user)
     {
@@ -37,22 +54,26 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        // Verificar si el usuario actual tiene el rol de SuperUsuario o Administrador
-        if (auth()->user()->rol === 'SuperUsuario' || auth()->user()->rol === 'Administrador') {
-            // Validación de los datos
-            $data = $request->validate([
-                'nombre' => 'required|max:255',
-                'correo' => 'required|email|max:255|unique:usuarios,correo,' . $user->id,
-                'rol' => 'required',
-            ]);
+    if (auth()->user()->rol === 'SuperUsuario' || auth()->user()->rol === 'Administrador') {
+        $data = $request->validate([
+            'nombre' => 'required|max:255',
+            'correo' => 'required|email|max:255|unique:usuarios,correo,' . $user->id,
+            'password' => 'sometimes|min:8',
+            'rol' => 'required',
+        ]);
 
-            // Actualiza el usuario con los datos validados
-            $user->update($data);
-
-            return redirect()->route('users.index')->with('success', 'Usuario actualizado con éxito.');
+        if (!empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        } else {
+            unset($data['password']);
         }
 
-        abort(403, 'Acción no autorizada.');
+        $user->update($data);
+
+        return redirect()->route('users.index')->with('success', 'Usuario actualizado con éxito.');
+    }
+
+    abort(403, 'Acción no autorizada.');
     }
 
     // ...

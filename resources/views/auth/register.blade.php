@@ -10,7 +10,8 @@
         </div>
         <div class="p-6">
             <div class="max-w-md mx-auto">
-                <form method="POST" action="{{ route('register') }}">
+                <!-- Asegúrate de que la etiqueta form incluya todos los elementos de entrada -->
+                <form id="userForm" action="{{ route('users.store') }}" method="POST">
                     @csrf
                     <div class="mb-4">
                         <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
