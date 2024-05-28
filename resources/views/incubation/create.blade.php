@@ -62,8 +62,17 @@
                             <input type="number" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="cantidad" name="cantidad" placeholder="Cantidad" value="{{ old('cantidad') }}" required>
                         </div>
                         <div>
-                            <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="tipo_huevo" name="tipo_huevo" placeholder="Tipo de Huevo" value="{{ old('tipo_huevo') }}" required>
+                        <label for="tipo_huevo" class="block text-gray-700 font-bold mb-2">Tipo de Huevo:</label>
+                        <select id="tipo_huevo" name="tipo_huevo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        <option value="" disabled selected>Seleccione un tipo de huevo</option>
+                        @foreach ($catalogoTipos as $tipo)
+                        <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
+                        @endforeach
+                        </select>
                         </div>
+
+
+
                         <div>
                             <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="numero_bandeja" name="numero_bandeja" placeholder="Número de Bandeja" value="{{ old('numero_bandeja') }}">
                         </div>

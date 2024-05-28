@@ -9,6 +9,7 @@ use App\Http\Requests\IncubationDataRequest;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Models\Configuracion;
+use App\Models\CatalogoTipo;
 
 class IncubationDataController extends Controller
 {
@@ -50,12 +51,13 @@ class IncubationDataController extends Controller
         // Verificar si el usuario tiene el rol de Usuario, Administrador o SuperUsuario
         if (auth()->user()->rol === 'Usuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
             $clients = Client::all();
-            return view('incubation.create', compact('clients'));
+            $catalogoTipos = CatalogoTipo::where('estado', true)->get(); // Obtener los tipos de huevos activos
+            return view('incubation.create', compact('clients', 'catalogoTipos'));
         }
-
+    
         abort(403, 'Acción no autorizada.');
     }
-
+    
     /**
      * Obtiene la lista de clientes en formato JSON.
      *

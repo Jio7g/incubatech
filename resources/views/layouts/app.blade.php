@@ -83,6 +83,15 @@
                 </a>
                 @endif
 
+
+                <!-- Catalogo -->
+                @if (auth()->user()->rol === 'SuperUsuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'Usuario')
+                <a href="{{ route('catalogotipos.index') }}" class="flex items-center px-4 py-3 text-lg text-white rounded-md hover:bg-gray-700 transition duration-300">
+                    <i class="fas fa-history mr-2"></i>
+                    <span>Catálogo</span>
+                </a>
+                @endif
+
                 <!-- Historial -->
                 @if (auth()->user()->rol === 'SuperUsuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'Usuario')
                 <a href="{{ url('/historial') }}" class="flex items-center px-4 py-3 text-lg text-white rounded-md hover:bg-gray-700 transition duration-300">
