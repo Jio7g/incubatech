@@ -72,4 +72,11 @@ public function getHuevosEclosionadosAttribute()
     return $this->actualizaciones()->sum('huevos_eclosionados');
 }
 
+// En tu modelo Incubacion
+public function catalogoTipo()
+{
+    return $this->belongsTo(CatalogoTipo::class, 'catalogo_tipo_id');  // Asume que 'catalogo_tipo_id' es la FK en Incubacion
+}
+
+
 }

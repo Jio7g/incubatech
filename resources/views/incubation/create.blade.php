@@ -66,10 +66,11 @@
                         <select id="tipo_huevo" name="tipo_huevo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
                         <option value="" disabled selected>Seleccione un tipo de huevo</option>
                         @foreach ($catalogoTipos as $tipo)
-                        <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
+                        <option value="{{ $tipo->nombre }}">{{ $tipo->nombre }}</option>
                         @endforeach
                         </select>
-                        </div>
+                    </div>
+
 
 
 

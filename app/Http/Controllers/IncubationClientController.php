@@ -16,7 +16,8 @@ class IncubationClientController extends Controller
         if (auth()->user()->rol === 'Usuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
             // Obtener solo los clientes que tienen al menos una incubación no finalizada
             $clientsWithIncubation = Client::whereHas('datosIncubacion', function ($query) {
-                $query->where('estado', '!=', 'finalizado');
+                $query->where('estado', '!=', 'finalizado')
+                ->with('catalogoTipo');
             })->with(['datosIncubacion' => function ($query) {
                 $query->where('estado', '!=', 'finalizado');
             }])->get();
@@ -34,18 +35,18 @@ class IncubationClientController extends Controller
 
     public function show($clientId)
     {
-        // Verificar si el usuario tiene el rol de Usuario, Administrador o SuperUsuario
-        if (auth()->user()->rol === 'Usuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
-            $client = Client::with(['datosIncubacion' => function ($query) {
-                $query->where('estado', '!=', 'finalizado');
-            }])->findOrFail($clientId);
-            $incubations = $client->datosIncubacion;
-
-            return view('incubation_clients.show', compact('client', 'incubations'));
-        }
-
-        abort(403, 'Acción no autorizada.');
+        $client = Client::with(['datosIncubacion' => function ($query) {
+            $query->where('estado', '!=', 'finalizado')->with('catalogoTipo');
+        }])->findOrFail($clientId);
+    
+        //dd($client->datosIncubacion->toArray()); // Solo para debugging, remover después de verificar
+    
+        $incubations = $client->datosIncubacion;
+    
+        return view('incubation_clients.show', compact('client', 'incubations'));
     }
+    
+    
 
     public function showSharedIncubation($clientId, $token)
     {
