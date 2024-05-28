@@ -101,7 +101,7 @@
 @endsection
 @section('scripts')
 <script>
-    // Lista original de usuarios (no se modifica)
+    // Lista original de usuarios
     const allUsers = @json($users);
     let users = allUsers.slice(); // Copia de usuarios para manipulación
 
@@ -148,45 +148,78 @@
         });
     }
 
-    // Paginación y funciones de navegación
-    function updatePageNumbers() {
-        const totalPages = Math.ceil(users.length / usersPerPage);
-        pageNumbers.textContent = `${currentPage} de ${totalPages}`;
-        prevPageLink.classList.toggle('opacity-50 cursor-not-allowed', currentPage === 1);
-        nextPageLink.classList.toggle('opacity-50 cursor-not-allowed', currentPage === totalPages);
-        prevPageLink.onclick = currentPage > 1 ? goToPreviousPage : null;
-        nextPageLink.onclick = currentPage < totalPages ? goToNextPage : null;
+  // Función para actualizar los números de página
+  function updatePageNumbers() {
+    const totalPages = Math.ceil(users.length / usersPerPage);
+    pageNumbers.textContent = `${currentPage} de ${totalPages}`;
+    if (currentPage === 1) {
+      prevPageLink.classList.add('opacity-50', 'cursor-not-allowed');
+      prevPageLink.removeEventListener('click', goToPreviousPage);
+    } else {
+      prevPageLink.classList.remove('opacity-50', 'cursor-not-allowed');
+      prevPageLink.addEventListener('click', goToPreviousPage);
     }
-
-    function goToPreviousPage() {
-        if (currentPage > 1) {
-            currentPage--;
-            displayUsers();
-            updatePageNumbers();
-        }
+    if (currentPage === totalPages) {
+      nextPageLink.classList.add('opacity-50', 'cursor-not-allowed');
+      nextPageLink.removeEventListener('click', goToNextPage);
+    } else {
+      nextPageLink.classList.remove('opacity-50', 'cursor-not-allowed');
+      nextPageLink.addEventListener('click', goToNextPage);
     }
-
-    function goToNextPage() {
-        const totalPages = Math.ceil(users.length / usersPerPage);
-        if (currentPage < totalPages) {
-            currentPage++;
-            displayUsers();
-            updatePageNumbers();
-        }
+  }
+  // Función para ir a la página anterior
+  function goToPreviousPage() {
+    if (currentPage > 1) {
+      currentPage--;
+      displayUsers();
+      updatePageNumbers();
     }
-
-    // Búsqueda de usuarios
-    function searchUsers() {
-        const searchInput = document.querySelector('#search');
-        const searchTerm = searchInput.value.toLowerCase();
-        users = allUsers.filter(user => user.nombre.toLowerCase().includes(searchTerm) || user.correo.toLowerCase().includes(searchTerm) || user.rol.toLowerCase().includes(searchTerm));
-        currentPage = 1;
-        displayUsers();
-        updatePageNumbers();
+  }
+  // Función para ir a la página siguiente
+  function goToNextPage() {
+    const totalPages = Math.ceil(users.length / usersPerPage);
+    if (currentPage < totalPages) {
+      currentPage++;
+      displayUsers();
+      updatePageNumbers();
     }
-
-    document.querySelector('#search').addEventListener('keyup', searchUsers);
-
+  }
+  // Función para buscar usuarios
+  function searchUsers() {
+    const searchInput = document.querySelector('#search');
+    const searchTerm = searchInput.value.toLowerCase();
+    users = @json($users).filter(user => {
+      const name = user.nombre.toLowerCase();
+      const email = user.correo.toLowerCase();
+      const role = user.rol.toLowerCase();
+      return name.includes(searchTerm) || email.includes(searchTerm) || role.includes(searchTerm);
+    });
+    currentPage = 1;
+    displayUsers();
+    updatePageNumbers();
+  }
+  // Evento de búsqueda al presionar una tecla
+  document.querySelector('#search').addEventListener('keyup', searchUsers);
+  // Funcionalidad del modal de confirmación de eliminación
+  const deleteModal = document.querySelector('#deleteModal');
+  const deleteForm = document.querySelector('#deleteForm');
+  const confirmDeleteButton = document.querySelector('#confirmDelete');
+  const cancelDeleteButton = document.querySelector('#cancelDelete');
+  let userIdToDelete = null;
+  // Abrir el modal al hacer clic en el botón "Eliminar"
+  userGrid.addEventListener('click', (e) => {
+    if (e.target.classList.contains('delete-user-btn')) {
+      userIdToDelete = e.target.dataset.userId;
+      deleteForm.action = `{{ route('users.destroy', ':id') }}`.replace(':id', userIdToDelete);
+      deleteModal.classList.remove('hidden');
+    }
+  });
+  // Cerrar el modal al hacer clic en el botón "Cancelar"
+  cancelDeleteButton.addEventListener('click', () => {
+    deleteModal.classList.add('hidden');
+    userIdToDelete = null;
+  });
+  // Cargar los usuarios y actualizar los números de página al cargar la
     displayUsers();
     updatePageNumbers();
 </script>
