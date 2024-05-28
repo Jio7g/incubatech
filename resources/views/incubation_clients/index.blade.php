@@ -4,10 +4,10 @@
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-9xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
         <div class="bg-gradient-to-r from-gray-800 to-blue-900 px-6 py-4 flex items-center justify-between">
-            <h1 class="text-2xl font-bold text-white">Clientes con Datos de Incubación</h1>
+            <h1 class="text-2xl font-bold text-white"><i class="fas fa-vote-yea"></i> Clientes con Datos de Incubación</h1>
             <div class="flex items-center">
-                <a href="{{ route('incubation.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-4">
-                    Agregar Nuevo
+                <a href="{{ route('incubation.create') }}" class="bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-4">
+                    Agregar Nuevo <i class="fas fa-plus"></i>
                 </a>
                 <div class="relative">
                     <input type="text" id="search" class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Buscar cliente...">
@@ -188,10 +188,10 @@
                     <div class="mt-4 md:mt-0 md:ml-auto">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <a href="/incubations/${client.id}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded text-center">
-                                Ver Incubaciones
+                                <i class="fas fa-eye"></i> Ver Incubaciones
                             </a>
                             <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-center" onclick="openConfirmationModal(${client.id}, '${client.nombre}', '${client.correo}')">
-                                Compartir
+                                <i class="fas fa-share-square"></i> Compartir
                             </button>
                         </div>
                     </div>

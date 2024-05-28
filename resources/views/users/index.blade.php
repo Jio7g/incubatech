@@ -4,9 +4,9 @@
 <div class="container mx-auto px-4 py-8">
   <div class="max-w-9xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
     <div class="bg-gradient-to-r from-gray-800 to-blue-900 px-6 py-4 flex justify-between items-center">
-      <h1 class="text-3xl font-bold text-white mb-4 md:mb-0">Lista de Usuarios</h1>
+      <h1 class="text-3xl font-bold text-white mb-4 md:mb-0"> <i class="fas fa-users"></i> Lista de Usuarios</h1>
       <a href="{{ route('register') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-        NUEVO USUARIO
+        NUEVO USUARIO <i class="fas fa-user-plus"></i>
       </a>
     </div>
     <div class="p-6">
@@ -29,7 +29,7 @@
               <p class="text-gray-600 mb-4">{{ $user->rol }}</p>
               <div class="flex justify-end">
                 <a href="{{ route('users.edit', $user->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
-                  Editar
+                    <i class="fas fa-user-edit"></i> Editar
                 </a>
                 <button type="button" class="delete-user-btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" data-user-id="{{ $user->id }}">
                   Eliminar
@@ -135,10 +135,10 @@
                         <p class="text-gray-600 mb-4">${user.rol}</p>
                         <div class="flex justify-end">
                             <a href="${routes.edit(user.id)}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
-                                Editar
+                                <i class="fas fa-user-edit"></i>Editar
                             </a>
                             <button type="button" class="delete-user-btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" data-user-id="${user.id}">
-                                Eliminar
+                                <i class="fas fa-user-minus"></i> Eliminar
                             </button>
                         </div>
                     </div>

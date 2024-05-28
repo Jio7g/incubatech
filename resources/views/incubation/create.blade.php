@@ -6,7 +6,7 @@
     <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
         <!-- Encabezado con degradado -->
         <div class="bg-gradient-to-r from-gray-800 to-blue-900 px-6 py-4 flex items-center justify-between">
-            <h1 class="text-2xl font-bold text-white">Agregar Datos de Incubación</h1>
+            <h1 class="text-2xl font-bold text-white"><i class="fas fa-egg"></i> Agregar Datos de Incubación</h1>
         </div>
         <div class="p-6">
             <form id="incubationForm" action="{{ route('incubation.store') }}" method="POST">
@@ -45,8 +45,8 @@
                             <input type="text" id="correo" name="correo" placeholder="Correo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="{{ old('correo') }}">
                         </div>
                         <div class="md:col-span-2 flex justify-between">
-                            <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onclick="openModal()">Buscar Cliente</button>
-                            <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onclick="clearClientFields()">Borrar Campos</button>
+                            <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onclick="openModal()">Buscar Cliente <i class="fas fa-search"></i></button>
+                            <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onclick="clearClientFields()">Borrar Campos <i class="fas fa-eraser"></i></button>
                         </div>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
 
                 <!-- Botón de guardar -->
                 <div class="mt-6 flex justify-end">
-                    <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Guardar</button>
+                    <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"><i class="fas fa-save"></i> Guardar Datos de Incubación </button>
                 </div>
             </form>
         </div>

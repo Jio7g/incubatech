@@ -4,9 +4,9 @@
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-9xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
         <div class="bg-gradient-to-r from-gray-800 to-blue-900 px-6 py-4 flex justify-between items-center">
-            <h1 class="text-3xl font-bold text-white mb-4 md:mb-0">Lista de Clientes</h1>
+            <h1 class="text-3xl font-bold text-white mb-4 md:mb-0"><i class="fas fa-address-book"></i> Lista de Clientes</h1>
             <a href="{{ route('clients.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                Añadir Cliente
+                Añadir Cliente <i class="fas fa-user-plus"></i>
             </a>
         </div>
         <div class="p-6">
@@ -31,10 +31,10 @@
                             <p class="text-gray-600 mb-4">Correo: {{ $client->correo }}</p>
                             <div class="flex justify-end">
                                 <a href="{{ route('clients.edit', $client->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
-                                    Editar
+                                    <i class="fas fa-user-edit"></i>Editar
                                 </a>
                                 <button type="button" class="delete-client-btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" data-client-id="{{ $client->id }}">
-                                    Eliminar
+                                    <i class="fas fa-user-minus"></i> Eliminar
                                 </button>
                             </div>
                         </div>
@@ -141,10 +141,10 @@
                         <p class="text-gray-600 mb-4">Correo: ${client.correo}</p>
                         <div class="flex justify-end">
                             <a href="${routes.edit(client.id)}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
-                                Editar
+                                <i class="fas fa-user-edit"></i> Editar
                             </a>
                             <button type="button" class="delete-client-btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" data-client-id="${client.id}">
-                                Eliminar
+                                <i class="fas fa-user-minus"></i> Eliminar
                             </button>
                         </div>
                     </div>
