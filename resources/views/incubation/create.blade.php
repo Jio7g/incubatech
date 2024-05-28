@@ -62,18 +62,14 @@
                             <input type="number" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="cantidad" name="cantidad" placeholder="Cantidad" value="{{ old('cantidad') }}" required>
                         </div>
                         <div>
-                        <label for="tipo_huevo" class="block text-gray-700 font-bold mb-2">Tipo de Huevo:</label>
-                        <select id="tipo_huevo" name="tipo_huevo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                        <option value="" disabled selected>Seleccione un tipo de huevo</option>
-                        @foreach ($catalogoTipos as $tipo)
-                        <option value="{{ $tipo->nombre }}">{{ $tipo->nombre }}</option>
-                        @endforeach
-                        </select>
-                    </div>
-
-
-
-
+                            <label for="tipo_huevo" class="block text-gray-700 font-bold mb-2">Tipo de Huevo:</label>
+                            <select id="tipo_huevo" name="tipo_huevo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                                <option value="" disabled selected>Seleccione un tipo de huevo</option>
+                                @foreach ($catalogoTipos as $tipo)
+                                <option value="{{ $tipo->nombre }}">{{ $tipo->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div>
                             <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="numero_bandeja" name="numero_bandeja" placeholder="Número de Bandeja" value="{{ old('numero_bandeja') }}">
                         </div>
@@ -124,19 +120,21 @@
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acción</th>
                                     </tr>
                                 </thead>
-                                <tbody id="clientsTableBody" class="bg-white divide-y divide-gray-200">
-                                    @foreach($clients as $client)
-                                    <tr class="hover:bg-gray-100 cursor-pointer" data-client='@json($client)' onclick="selectClientFromData(this)">
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $client->codigo }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $client->nombre }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $client->direccion }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a href="#" class="text-indigo-600 hover:text-indigo-900">Seleccionar</a>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
+                                <tbody id="clientsTableBody" class="bg-white divide-y divide-gray-200"></tbody>
                             </table>
+                        </div>
+                        <div class="mt-4 flex justify-center">
+                            <nav class="inline-flex rounded-md shadow-sm" aria-label="Pagination">
+                                <a href="#" id="prevPageLink" class="pagination-link py-2 px-4 rounded-l-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
+                                    <span class="sr-only">Anterior</span>
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                                <span id="pageNumbers" class="pagination-link py-2 px-4 border-t border-b border-gray-300 bg-white text-gray-700"></span>
+                                <a href="#" id="nextPageLink" class="pagination-link py-2 px-4 rounded-r-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
+                                    <span class="sr-only">Siguiente</span>
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </nav>
                         </div>
                     </div>
                 </div>
@@ -174,16 +172,6 @@
         closeModal();
     }
 
-    // Función para filtrar clientes en la búsqueda
-    document.getElementById('searchClientInput').addEventListener('keyup', function() {
-        const input = this.value.toLowerCase();
-        const rows = document.querySelectorAll('#clientsTableBody tr');
-        rows.forEach(row => {
-            const clientName = row.cells[1].textContent.toLowerCase();
-            row.style.display = clientName.includes(input) ? "" : "none";
-        });
-    });
-
     // Función para establecer la fecha actual en el campo "fecha_recepcion"
     document.addEventListener("DOMContentLoaded", function() {
         var fechaCreacionInput = document.getElementById('fecha_recepcion');
@@ -219,5 +207,92 @@
             }
         });
     }
+
+    // Función para paginacion en la tabla de clientes
+    const allClients = @json($clients);
+    let clients = allClients.slice();
+    const clientsPerPage = 5;
+    let currentPage = 1;
+
+    const clientsTableBody = document.querySelector('#clientsTableBody');
+    const pageNumbers = document.querySelector('#pageNumbers');
+    const prevPageLink = document.querySelector('#prevPageLink');
+    const nextPageLink = document.querySelector('#nextPageLink');
+
+    function displayClients() {
+    const startIndex = (currentPage - 1) * clientsPerPage;
+    const endIndex = startIndex + clientsPerPage;
+    const clientsToDisplay = clients.slice(startIndex, endIndex);
+
+    clientsTableBody.innerHTML = '';
+    clientsToDisplay.forEach(client => {
+        const row = `
+            <tr class="hover:bg-gray-100 cursor-pointer" data-client='${JSON.stringify(client)}' onclick="selectClientFromData(this)">
+                <td class="px-6 py-4 whitespace-nowrap">${client.codigo}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${client.nombre}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${client.direccion}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <a href="#" class="text-indigo-600 hover:text-indigo-900">Seleccionar</a>
+                </td>
+            </tr>
+        `;
+        clientsTableBody.innerHTML += row;
+    });
+}
+
+function updatePagination() {
+    const totalPages = Math.ceil(clients.length / clientsPerPage);
+    pageNumbers.textContent = `${currentPage} de ${totalPages}`;
+
+    if (currentPage === 1) {
+        prevPageLink.classList.add('opacity-50', 'cursor-not-allowed');
+        prevPageLink.removeEventListener('click', goToPreviousPage);
+    } else {
+        prevPageLink.classList.remove('opacity-50', 'cursor-not-allowed');
+        prevPageLink.addEventListener('click', goToPreviousPage);
+    }
+
+    if (currentPage === totalPages) {
+        nextPageLink.classList.add('opacity-50', 'cursor-not-allowed');
+        nextPageLink.removeEventListener('click', goToNextPage);
+    } else {
+        nextPageLink.classList.remove('opacity-50', 'cursor-not-allowed');
+        nextPageLink.addEventListener('click', goToNextPage);
+    }
+}
+
+function goToPreviousPage() {
+    if (currentPage > 1) {
+        currentPage--;
+        displayClients();
+        updatePagination();
+    }
+}
+
+function goToNextPage() {
+    const totalPages = Math.ceil(clients.length / clientsPerPage);
+    if (currentPage < totalPages) {
+        currentPage++;
+        displayClients();
+        updatePagination();
+    }
+}
+
+function searchClients() {
+    const searchInput = document.querySelector('#searchClientInput');
+    const searchTerm = searchInput.value.toLowerCase();
+    clients = allClients.filter(client => {
+        const name = client.nombre.toLowerCase();
+        return name.includes(searchTerm);
+    });
+    currentPage = 1;
+    displayClients();
+    updatePagination();
+}
+
+document.querySelector('#searchClientInput').addEventListener('keyup', searchClients);
+
+displayClients();
+updatePagination();
 </script>
 @endsection
