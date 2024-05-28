@@ -44,14 +44,12 @@ class ClientController extends Controller
         abort(403, 'Acción no autorizada.');
     }
 
-    public function edit($id)
+    public function edit(Client $client)
     {
         // Verificar si el usuario tiene el rol de Administrador o SuperUsuario
         if (auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
-            $client = Client::findOrFail($id);
             return view('clients.edit', compact('client'));
         }
-
         abort(403, 'Acción no autorizada.');
     }
 

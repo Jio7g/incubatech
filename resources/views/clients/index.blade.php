@@ -111,12 +111,20 @@
     const nextPageLink = document.querySelector('#next-page');
     const clientsPerPage = 8;
     let currentPage = 1;
+    // const routes = {
+    // edit: id => `{{ url('clientes/${id}/editar') }}`,
+    // destroy: id => `{{ url('clientes/${id}') }}`
+    // };
 
     // Función para mostrar los clientes en la página actual
     function displayClients() {
         const startIndex = (currentPage - 1) * clientsPerPage;
         const endIndex = startIndex + clientsPerPage;
         const clientsToDisplay = clients.slice(startIndex, endIndex);
+        const routes = {
+        edit: id => `{{ url('clientes/${id}/editar') }}`,
+        destroy: id => `{{ url('clientes/${id}') }}`
+        }
 
         clientGrid.innerHTML = '';
 
@@ -132,7 +140,7 @@
                         <p class="text-gray-600 mb-2">Teléfono: ${client.telefono}</p>
                         <p class="text-gray-600 mb-4">Correo: ${client.correo}</p>
                         <div class="flex justify-end">
-                            <a href="{{ route('clients.edit', $client->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
+                            <a href="${routes.edit(client.id)}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
                                 Editar
                             </a>
                             <button type="button" class="delete-client-btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" data-client-id="${client.id}">
