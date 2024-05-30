@@ -25,11 +25,6 @@ class ClientRequest extends FormRequest
     public function rules()
     {
         return [
-            'codigo' => [
-                'required',
-                'max:20',
-                Rule::unique('clientes', 'codigo')->ignore($this->client), // Asumiendo que 'cliente' es el nombre del parámetro de la ruta
-            ],
             'nombre' => [
                 'required',
                 'string',
@@ -45,7 +40,7 @@ class ClientRequest extends FormRequest
             ],
         ];
     }
-    
+
 
     /**
      * Get the error messages for the defined validation rules.
