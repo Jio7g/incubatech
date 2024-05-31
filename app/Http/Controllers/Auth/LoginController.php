@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
+use App\Models\Configuracion;
+use Illuminate\Support\Facades\Log;
 class LoginController extends Controller
 {
     use AuthenticatesUsers;
@@ -25,4 +26,13 @@ class LoginController extends Controller
     {
         return 'correo'; // Esto debería reflejar el nombre de la columna de tu base de datos
     }
+
+    public function showLoginForm()
+    {
+        $configuracion = Configuracion::first();
+    
+        return view('auth.login', compact('configuracion'));
+
+    }
+    
 }
