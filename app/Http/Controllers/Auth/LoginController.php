@@ -30,9 +30,7 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         $configuracion = Configuracion::first();
-    
         return view('auth.login', compact('configuracion'));
-
     }
-    
+
 }

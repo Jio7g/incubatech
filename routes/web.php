@@ -47,7 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/usuarios/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::put('/usuarios/{user}', [UserController::class, 'update'])->name('users.update');
     Route::post('/usuarios/store', [UserController::class, 'store'])->name('users.store');
-    
+
 
     Route::resource('clients', 'ClientController');
     Route::get('/clientes/crear', [ClientController::class, 'create'])->name('clients.create');
@@ -91,7 +91,7 @@ Route::middleware('auth')->group(function () {
         // Rutas para CatalogoTipo
     Route::get('catalogotipos', [CatalogoTipoController::class, 'index'])->name('catalogotipos.index');
     Route::get('catalogotipos/create', [CatalogoTipoController::class, 'create'])->name('catalogotipos.create');
-    Route::post('catalogotipos', [CatalogoTipoController::class, 'store'])->name('catalogotipos.store');    
+    Route::post('catalogotipos', [CatalogoTipoController::class, 'store'])->name('catalogotipos.store');
     Route::get('catalogotipos/{id}/edit', [CatalogoTipoController::class, 'edit'])->name('catalogotipos.edit');
     Route::put('catalogotipos/{id}', [CatalogoTipoController::class, 'update'])->name('catalogotipos.update');
     Route::delete('catalogotipos/{id}', [CatalogoTipoController::class, 'destroy'])->name('catalogotipos.destroy');

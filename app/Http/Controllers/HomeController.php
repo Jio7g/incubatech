@@ -20,8 +20,8 @@ class HomeController extends Controller
         if (auth()->user()->rol === 'Usuario' || auth()->user()->rol === 'Administrador' || auth()->user()->rol === 'SuperUsuario') {
             $userCount = User::count();
             $clientCount = Client::count();
-            $ongoingIncubationsCount = IncubationData::where('estado', 'en_proceso')->count();
-            $completedIncubationsCount = IncubationData::where('estado', 'completada')->count();
+            $ongoingIncubationsCount = IncubationData::where('estado', 'en proceso')->count();
+            $completedIncubationsCount = IncubationData::where('estado', 'finalizado')->count();
 
             return view('home', compact('userCount', 'clientCount', 'ongoingIncubationsCount', 'completedIncubationsCount'));
         }
