@@ -24,7 +24,8 @@
         }
 
         .company-details {
-            text-align: right;
+            text-align: center;
+            margin-right: 1000px;
         }
 
         .details {

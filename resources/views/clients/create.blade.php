@@ -11,13 +11,6 @@
                 <form action="{{ route('clients.store') }}" method="POST">
                     @csrf
                     <div class="mb-4">
-                        <label for="codigo" class="block text-gray-700 text-sm font-bold mb-2">Código</label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" id="codigo" name="codigo" value="{{ old('codigo') }}" autofocus required>
-                        @error('codigo')
-                        <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    <div class="mb-4">
                         <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
                         <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" id="nombre" name="nombre" value="{{ old('nombre') }}" autofocus>
                         @error('nombre')

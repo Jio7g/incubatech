@@ -12,6 +12,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ActualizacionController;
 use App\Http\Controllers\BitacoraController;
 use App\Http\Controllers\ConfiguracionController;
+use App\Http\Controllers\CatalogoTipoController;
 // Rutas accesibles para todos los usuarios (autenticados y no autenticados)
 Route::get('/', function () {
     return view('auth.login');
@@ -44,8 +45,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/usuarios', [UserController::class, 'index'])->name('users.index');
     Route::get('/usuarios/{user}/editar', [UserController::class, 'edit'])->name('users.edit');
     Route::delete('/usuarios/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-    Route::get('/usuarios/{user}/editar', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/usuarios/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::post('/usuarios/store', [UserController::class, 'store'])->name('users.store');
+    
 
     Route::resource('clients', 'ClientController');
     Route::get('/clientes/crear', [ClientController::class, 'create'])->name('clients.create');
@@ -84,4 +86,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/configruaciones/{configuracion}', [ConfiguracionController::class, 'destroy'])->name('configuracion.destroy');
     Route::get('/configuraciones/{configuracion}/editar', [ConfiguracionController::class, 'edit'])->name('configuracion.edit');
     Route::put('/configuraciones/{configuracion}', [ConfiguracionController::class, 'update'])->name('configuracion.update');
+
+
+        // Rutas para CatalogoTipo
+    Route::get('catalogotipos', [CatalogoTipoController::class, 'index'])->name('catalogotipos.index');
+    Route::get('catalogotipos/create', [CatalogoTipoController::class, 'create'])->name('catalogotipos.create');
+    Route::post('catalogotipos', [CatalogoTipoController::class, 'store'])->name('catalogotipos.store');    
+    Route::get('catalogotipos/{id}/edit', [CatalogoTipoController::class, 'edit'])->name('catalogotipos.edit');
+    Route::put('catalogotipos/{id}', [CatalogoTipoController::class, 'update'])->name('catalogotipos.update');
+    Route::delete('catalogotipos/{id}', [CatalogoTipoController::class, 'destroy'])->name('catalogotipos.destroy');
 });

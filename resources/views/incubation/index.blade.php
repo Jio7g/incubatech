@@ -4,10 +4,10 @@
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-9xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
         <div class="bg-gradient-to-r from-gray-800 to-blue-900 px-6 py-4 flex items-center justify-between">
-            <h1 class="text-2xl font-bold text-white">Listado de Datos de Incubación</h1>
+            <h1 class="text-2xl font-bold text-white"><i class="fas fa-list"></i> Listado de Datos de Incubación</h1>
             <div class="flex items-center">
-                <a href="{{ route('incubation.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-4">
-                    Agregar Nuevo
+                <a href="{{ route('incubation.create') }}" class="bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-4">
+                    Agregar Nueva incubación <i class="fas fa-plus"></i>
                 </a>
 
                 <div class="relative">
@@ -25,7 +25,7 @@
                 <form action="{{ route('incubation.index') }}" method="GET" class="flex items-center">
                     <input type="date" name="fecha_inicio" id="fecha_inicio" value="{{ $fechaInicio }}" class="border border-gray-300 rounded mr-2">
                     <input type="date" name="fecha_fin" id="fecha_fin" value="{{ $fechaFin }}" class="border border-gray-300 rounded mr-2">
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Buscar</button>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Buscar <i class="fas fa-search"></i></button>
                 </form>
             </div>
 
