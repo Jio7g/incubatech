@@ -8,8 +8,6 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente en tu sistema:
 
 - PHP (versión 7.4 o superior)
 - Composer
-- Node.js (versión 12 o superior)
-- NPM (versión 6 o superior)
 
 ## Instalación
 
